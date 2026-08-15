@@ -1,0 +1,1030 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap');
+
+/* Infinite marquee — left to right */
+.marquee {
+    width: 100%;
+}
+
+.marquee-track {
+    display: flex;
+    width: max-content;
+    animation: marquee-ltr 32s linear infinite;
+    will-change: transform;
+}
+
+.marquee-content {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    gap: 2rem;
+    padding-right: 2rem;
+    white-space: nowrap;
+}
+
+.marquee-content span {
+    font-size: 2.25rem;
+    font-weight: 900;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    opacity: 0.2;
+}
+
+@media (min-width: 768px) {
+    .marquee-content span {
+        font-size: 3.75rem;
+    }
+}
+
+@keyframes marquee-ltr {
+    from { transform: translateX(-50%); }
+    to { transform: translateX(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .marquee-track {
+        animation: none;
+        transform: translateX(0);
+    }
+}
+
+:root {
+    --bg: #050505;
+    --fg: #ffffff;
+    --primary: #8b5cf6;
+    --secondary: #06b6d4;
+    --accent: #ec4899;
+}
+
+/* --- Premium Overlays --- */
+.noise-overlay {
+    position: fixed;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    z-index: 9999;
+    pointer-events: none;
+    opacity: 0.12;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.6'/%3E%3C/svg%3E");
+    background-size: 200px 200px;
+    mix-blend-mode: overlay;
+    animation: noiseJitter 0.2s infinite;
+}
+
+@keyframes noiseJitter {
+    0% { transform: translate(0,0); }
+    10% { transform: translate(-1%,-1%); }
+    20% { transform: translate(1%,1%); }
+    30% { transform: translate(-1%,1%); }
+    40% { transform: translate(1%,-1%); }
+    50% { transform: translate(-0.5%,-0.5%); }
+    60% { transform: translate(0.5%,0.5%); }
+    70% { transform: translate(-0.5%,0.5%); }
+    80% { transform: translate(0.5% -0.5%); }
+    90% { transform: translate(0,0); }
+    100% { transform: translate(0,0); }
+}
+
+.scanlines {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 9998;
+    pointer-events: none;
+    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+    background-size: 100% 4px, 3px 100%;
+    opacity: 0.15;
+}
+
+.vignette {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 9997;
+    pointer-events: none;
+    background: radial-gradient(circle, transparent 40%, rgba(0,0,0,0.8) 120%);
+}
+
+/* --- Custom Cursor --- */
+.cursor {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 20px;
+    height: 20px;
+    background: #fff;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 40000;
+    mix-blend-mode: difference;
+    transition: width 0.3s cubic-bezier(0.23, 1, 0.32, 1), height 0.3s cubic-bezier(0.23, 1, 0.32, 1), background 0.3s;
+    will-change: transform;
+}
+
+.cursor.active {
+    width: 80px;
+    height: 80px;
+    background: #fff;
+    mix-blend-mode: normal;
+}
+
+.cursor.active .cursor-text {
+    opacity: 1;
+}
+
+.cursor-follower {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 40px;
+    height: 40px;
+    border: 1px solid rgba(255, 255, 255, 0.7);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 39999;
+    will-change: transform;
+}
+
+@media (hover: none), (pointer: coarse) {
+    body {
+        cursor: auto !important;
+    }
+    .cursor,
+    .cursor-follower {
+        display: none !important;
+    }
+}
+
+/* --- Animated Background --- */
+.bg-mesh {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    filter: blur(100px);
+}
+
+.mesh-circle {
+    position: absolute;
+    border-radius: 50%;
+}
+
+.c1 { width: 40vw; height: 40vw; background: var(--primary); top: -10%; left: -10%; animation: float 20s infinite alternate; }
+.c2 { width: 35vw; height: 35vw; background: var(--secondary); bottom: -5%; right: -5%; animation: float 25s infinite alternate-reverse; }
+.c3 { width: 30vw; height: 30vw; background: var(--accent); top: 40%; left: 30%; animation: float 18s infinite; }
+
+@keyframes float {
+    from { transform: translate(0, 0) scale(1); }
+    to { transform: translate(10%, 10%) scale(1.1); }
+}
+
+/* --- Special Typography --- */
+.hero-title {
+    background: linear-gradient(90deg, #fff, var(--primary), var(--secondary), #fff);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: prismatic 5s linear infinite;
+    filter: drop-shadow(0 0 30px rgba(139, 92, 246, 0.2));
+    letter-spacing: -0.08em;
+}
+
+@keyframes prismatic {
+    to { background-position: 200% center; }
+}
+
+.hero-portrait-frame {
+    border: 3px solid rgba(255, 255, 255, 0.28);
+    box-shadow:
+        0 0 0 8px rgba(139, 92, 246, 0.14),
+        0 22px 48px rgba(0, 0, 0, 0.5);
+}
+
+.hero-available {
+    position: absolute;
+    left: 50%;
+    bottom: -0.4rem;
+    transform: translateX(-50%);
+    background: var(--primary);
+    padding: 0.3rem 0.8rem;
+    border-radius: 999px;
+    font-size: 9px;
+    font-weight: 800;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    box-shadow: 0 8px 20px rgba(139, 92, 246, 0.45);
+}
+
+.project-dots {
+    display: none;
+}
+
+/* --- Glitch Effect --- */
+/* (Removed as requested) */
+
+.dud {
+    color: var(--primary);
+    opacity: 0.5;
+}
+
+/* --- Adjusting Bento for Skew --- */
+[data-aos] {
+    pointer-events: none;
+}
+[data-aos].aos-animate {
+    pointer-events: auto;
+}
+
+.hero-actions,
+.hero-actions a {
+    pointer-events: auto !important;
+    position: relative;
+    z-index: 2;
+}
+
+/* Ensure images cover in bento */
+.group img {
+    transition: transform 0.7s cubic-bezier(0.23, 1, 0.32, 1), opacity 0.7s ease;
+}
+
+/* --- Horizontal Scroll Section --- */
+/* Mobile first: real swipe with snapping. Desktop: GSAP-driven pinned scroll. */
+.horizontal-scroll-container {
+    width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+    overscroll-behavior-x: contain;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+}
+
+.horizontal-scroll-container::-webkit-scrollbar {
+    display: none;
+}
+
+.horizontal-scroll-wrapper {
+    display: flex;
+    width: fit-content;
+    padding-left: 9vw;
+    padding-right: 9vw;
+}
+
+.horizontal-item {
+    flex-shrink: 0;
+    width: 82vw;
+    margin-right: 4vw;
+    scroll-snap-align: center;
+}
+
+.swipe-hint {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+@media (min-width: 768px) {
+    .horizontal-scroll-container {
+        overflow: hidden;
+        scroll-snap-type: none;
+    }
+
+    .horizontal-scroll-wrapper {
+        padding-left: 10vw;
+        padding-right: 10vw;
+    }
+
+    .horizontal-item {
+        width: 45vw;
+        margin-right: 5vw;
+        scroll-snap-align: none;
+    }
+
+    .swipe-hint {
+        display: none;
+    }
+}
+
+/* --- Loader Animation --- */
+#loader .loader-circle {
+    animation: rotate 10s linear infinite;
+}
+
+@keyframes rotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+#loaderCounter {
+    font-variant-numeric: tabular-nums;
+}
+
+/* --- Typography Reveal --- */
+.line {
+    overflow: hidden;
+}
+
+.word {
+    display: inline-block;
+}
+
+.char {
+    display: inline-block;
+}
+
+/* --- Light Leak --- */
+#lightLeak {
+    animation: leakMove 15s infinite alternate;
+}
+
+@keyframes leakMove {
+    0% { transform: translate(-10%, -10%) scale(1); }
+    100% { transform: translate(10%, 10%) scale(1.5); }
+}
+
+/* --- Chromatic Aberration --- */
+.horizontal-item:hover {
+    box-shadow: 
+        2px 0 10px rgba(255,0,0,0.2), 
+        -2px 0 10px rgba(0,255,255,0.2);
+}
+
+.reveal-text {
+    opacity: 0;
+}
+
+.section-title {
+    font-size: clamp(3rem, 10vw, 8rem);
+    line-height: 0.9;
+    letter-spacing: -0.05em;
+    text-transform: uppercase;
+}
+
+/* --- Cinematic Video Feel --- */
+html.lenis {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+.lenis.lenis-scrolling iframe {
+  pointer-events: none;
+}
+
+/* Ken Burns Effect */
+.ken-burns {
+    animation: kenBurns 20s ease-in-out infinite alternate;
+}
+
+@keyframes kenBurns {
+    0% { transform: scale(1); }
+    100% { transform: scale(1.15) translate(1%, 1%); }
+}
+
+/* Hide scrollbars — scrolling still works */
+html {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+html::-webkit-scrollbar,
+body::-webkit-scrollbar,
+*::-webkit-scrollbar {
+    display: none;
+    width: 0;
+    height: 0;
+}
+
+* {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+/* Glass Detail View */
+#projectDetail {
+    background: rgba(5, 5, 5, 0.97);
+    backdrop-filter: blur(50px) saturate(180%);
+    -webkit-overflow-scrolling: touch;
+    pointer-events: none;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+#projectDetail.is-open {
+    pointer-events: auto;
+}
+
+#projectDetail::-webkit-scrollbar {
+    display: none;
+    width: 0;
+}
+
+#fsMenu {
+    pointer-events: none;
+}
+
+#fsMenu:not(.translate-x-full) {
+    pointer-events: auto;
+}
+
+#projectDetail #detailDesc {
+    text-align: right;
+    line-height: 1.9;
+}
+
+.detail-skill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 4px 12px 4px 4px;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: rgba(255, 255, 255, 0.05);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    transition: border-color 0.3s ease, background 0.3s ease, transform 0.3s ease;
+}
+
+.detail-skill:hover {
+    border-color: rgba(139, 92, 246, 0.55);
+    background: rgba(139, 92, 246, 0.12);
+    transform: translateY(-2px);
+}
+
+.detail-skill .stack-icon {
+    width: 26px;
+    height: 26px;
+    pointer-events: auto;
+    position: static;
+    border-radius: 999px;
+}
+
+.detail-skill:not(:has(.stack-icon)) {
+    padding: 8px 14px;
+}
+
+.detail-points {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.detail-point {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.9rem;
+    padding: 1rem 1.1rem;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 18px;
+    text-align: right;
+    transition: border-color 0.3s ease, background 0.3s ease;
+}
+
+.detail-point:hover {
+    border-color: rgba(139, 92, 246, 0.4);
+    background: rgba(139, 92, 246, 0.08);
+}
+
+.detail-point-index {
+    flex-shrink: 0;
+    font-size: 0.65rem;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    color: #8b5cf6;
+    margin-top: 0.2rem;
+}
+
+.detail-point p {
+    margin: 0;
+    font-size: 0.95rem;
+    line-height: 1.75;
+    opacity: 0.85;
+}
+
+@media (min-width: 768px) {
+    .detail-point p {
+        font-size: 1.05rem;
+    }
+}
+
+#detailThumbs {
+    scrollbar-width: none;
+}
+
+#detailThumbs::-webkit-scrollbar {
+    display: none;
+}
+
+#detailImg {
+    transition: opacity 0.2s ease;
+}
+
+/* Contact Form */
+.contact-input {
+    color: #fff;
+    caret-color: var(--primary);
+}
+
+.contact-input:focus {
+    background: rgba(255, 255, 255, 0.08);
+    box-shadow: 0 0 0 1px rgba(139, 92, 246, 0.35);
+}
+
+#contactSubmit:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* Physics Stack */
+.stack-playground {
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.03);
+    touch-action: none;
+    user-select: none;
+    cursor: grab;
+}
+
+.stack-playground:active {
+    cursor: grabbing;
+}
+
+.stack-tag {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    height: 42px;
+    padding: 4px 12px 4px 4px;
+    border-radius: 12px;
+    overflow: hidden;
+    font-size: 0.85rem;
+    font-weight: 700;
+    white-space: nowrap;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35);
+    will-change: transform;
+    pointer-events: none;
+    z-index: 2;
+}
+
+.stack-icon {
+    width: 34px;
+    height: 34px;
+    align-self: center;
+    border-radius: 8px;
+    background: #fff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.stack-icon img,
+.stack-icon svg {
+    width: 18px;
+    height: 18px;
+    display: block;
+    object-fit: contain;
+}
+
+.stack-playground.stack-fallback {
+    display: flex;
+    flex-wrap: wrap;
+    align-content: flex-end;
+    align-items: flex-end;
+    gap: 0.65rem;
+    padding: 1.25rem;
+    overflow: auto;
+}
+
+.stack-playground.stack-fallback #stackTags {
+    position: static;
+    display: contents;
+}
+
+.stack-playground.stack-fallback .stack-tag {
+    position: static;
+    transform: none !important;
+}
+
+@media (min-width: 768px) {
+    .stack-tag {
+        height: 46px;
+        font-size: 0.95rem;
+        padding: 5px 14px 5px 5px;
+        gap: 0.6rem;
+    }
+
+    .stack-icon {
+        width: 36px;
+        height: 36px;
+        border-radius: 9px;
+    }
+
+    .stack-icon img,
+    .stack-icon svg {
+        width: 18px;
+        height: 18px;
+    }
+}
+
+.horizontal-item img {
+    filter: grayscale(0.5) contrast(1.1);
+    transition: filter 0.8s ease, transform 0.8s ease;
+}
+
+.horizontal-item:hover img {
+    filter: grayscale(0) contrast(1);
+}
+
+/* ==========================================================================
+   MOBILE DESIGN
+   A dedicated phone layout: vertical project stack, floating tab bar,
+   and only the effects that stay cheap on a handset GPU.
+   Desktop keeps everything above untouched.
+   ========================================================================== */
+
+/* --- Floating tab bar (mobile only, hidden on desktop via md:hidden) --- */
+#mobileNav {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 20005;
+    padding: 0 0.7rem calc(0.6rem + env(safe-area-inset-bottom, 0px));
+    pointer-events: none;
+}
+
+.mnav-shell {
+    position: relative;
+    display: flex;
+    gap: 2px;
+    padding: 6px;
+    border-radius: 24px;
+    pointer-events: auto;
+    background: rgba(12, 12, 16, 0.72);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(20px) saturate(160%);
+    -webkit-backdrop-filter: blur(20px) saturate(160%);
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.07);
+}
+
+.mnav-pill {
+    position: absolute;
+    top: 6px;
+    left: 6px;
+    width: 0;
+    height: calc(100% - 12px);
+    border-radius: 18px;
+    background: linear-gradient(155deg, rgba(139, 92, 246, 0.95), rgba(6, 182, 212, 0.7));
+    box-shadow: 0 6px 18px rgba(139, 92, 246, 0.45);
+    transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1), width 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+    pointer-events: none;
+}
+
+.mnav-item {
+    position: relative;
+    z-index: 1;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    padding: 9px 0 7px;
+    border-radius: 18px;
+    color: rgba(255, 255, 255, 0.5);
+    text-decoration: none;
+    -webkit-tap-highlight-color: transparent;
+    transition: color 0.35s ease, transform 0.18s ease;
+}
+
+.mnav-item svg {
+    width: 20px;
+    height: 20px;
+}
+
+.mnav-item span {
+    font-size: 9px;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+
+.mnav-item.is-active {
+    color: #fff;
+}
+
+.mnav-item:active {
+    transform: scale(0.9);
+}
+
+/* --- Section meta line --- */
+.swipe-hint-rule {
+    flex: 1;
+    height: 1px;
+    background: currentColor;
+    opacity: 0.3;
+}
+
+/* Hero should fill the visual viewport, not the address-bar-inflated one. */
+#home {
+    min-height: 100vh;
+}
+
+@supports (min-height: 100svh) {
+    #home {
+        min-height: 100svh;
+    }
+}
+
+/* Without hover there is no way to reveal card content, so show it upfront.
+   Narrow viewports are included so resizing a desktop browser previews this too. */
+@media (hover: none), (pointer: coarse), (max-width: 767px) {
+    .project-card-body {
+        transform: translateY(0) !important;
+    }
+
+    .project-card-cta {
+        opacity: 1 !important;
+    }
+
+    .horizontal-item img {
+        filter: none !important;
+    }
+
+    /* Badges react to taps, so the page must keep owning vertical gestures. */
+    .stack-playground {
+        touch-action: pan-y;
+        cursor: default;
+    }
+
+    /* AOS gates pointer events until it animates; too risky on touch. */
+    [data-aos] {
+        pointer-events: auto;
+    }
+}
+
+@media (max-width: 767px) {
+    /* --- Hero: bigger portrait, readable type, compact actions --- */
+    #home {
+        padding-top: 5.75rem;
+        padding-bottom: 6.25rem;
+        min-height: 100svh;
+    }
+
+    .hero-portrait-frame {
+        width: 11rem;
+        height: 11rem;
+        border-width: 3px;
+    }
+
+    .hero-title {
+        mix-blend-mode: normal;
+        filter: drop-shadow(0 8px 24px rgba(0, 0, 0, 0.45));
+    }
+
+    .hero-actions a {
+        font-size: 0.82rem;
+        letter-spacing: 0.02em;
+    }
+
+    /* --- Projects: native snap carousel, peek of the next card --- */
+    #work {
+        overflow: hidden;
+        padding-bottom: 5.5rem;
+    }
+
+    .horizontal-scroll-container {
+        overflow-x: auto;
+        overflow-y: hidden;
+        scroll-snap-type: x mandatory;
+        scroll-padding-inline: 11vw;
+        overscroll-behavior-x: contain;
+        -webkit-overflow-scrolling: touch;
+        padding-bottom: 0.35rem;
+    }
+
+    .horizontal-scroll-wrapper {
+        flex-direction: row;
+        width: max-content;
+        gap: 0.85rem;
+        padding: 0 11vw;
+        counter-reset: project;
+    }
+
+    .horizontal-item {
+        width: min(78vw, 340px);
+        height: auto !important;
+        aspect-ratio: 3 / 4;
+        margin-right: 0;
+        scroll-snap-align: center;
+        scroll-snap-stop: always;
+        counter-increment: project;
+        border-radius: 26px !important;
+        padding: 1.25rem !important;
+        box-shadow: 0 18px 45px rgba(0, 0, 0, 0.45);
+        backdrop-filter: none !important;
+        isolation: isolate;
+    }
+
+    /* Media sits at z-index -1 and the copy at 10, so the legibility scrim
+       slots in between instead of needing another wrapper element. */
+    .horizontal-item::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+        pointer-events: none;
+        background: linear-gradient(to top,
+            rgba(4, 4, 6, 0.95) 0%,
+            rgba(4, 4, 6, 0.78) 30%,
+            rgba(4, 4, 6, 0.34) 66%,
+            rgba(4, 4, 6, 0.58) 100%);
+    }
+
+    .horizontal-item::before {
+        content: counter(project, decimal-leading-zero);
+        position: absolute;
+        top: 1.3rem;
+        left: 1.4rem;
+        z-index: 5;
+        font-size: 0.65rem;
+        font-weight: 800;
+        letter-spacing: 0.22em;
+        color: rgba(255, 255, 255, 0.75);
+        /* Several projects are light UI screenshots, so the index needs its own
+           contrast rather than relying on the artwork behind it. */
+        text-shadow: 0 1px 8px rgba(0, 0, 0, 0.9);
+    }
+
+    /* Brighter than the old 0.5 now that a scrim handles legibility, but still
+       dim enough that light dashboard screenshots don't wash the card out. */
+    .horizontal-item img,
+    .horizontal-item video {
+        opacity: 0.65 !important;
+        will-change: transform;
+    }
+
+    .horizontal-item .project-card-body h3 {
+        font-size: 1.65rem;
+        line-height: 1.05;
+        letter-spacing: -0.02em;
+        margin-bottom: 0.45rem;
+    }
+
+    .horizontal-item .project-card-body p {
+        font-size: 0.83rem;
+        line-height: 1.75;
+        opacity: 0.75;
+        margin-bottom: 0.9rem;
+    }
+
+    .project-card-cta {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.45rem;
+        padding: 0.55rem 1rem !important;
+        background: rgba(255, 255, 255, 0.13) !important;
+        border: 1px solid rgba(255, 255, 255, 0.16);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+    }
+
+    .project-card-cta::after {
+        content: '→';
+        font-size: 0.9rem;
+        line-height: 1;
+    }
+
+    .project-dots {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 0.38rem;
+        margin-top: 1.1rem;
+        min-height: 10px;
+    }
+
+    .project-dot {
+        width: 6px;
+        height: 6px;
+        padding: 0;
+        border: 0;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.22);
+        cursor: pointer;
+        -webkit-tap-highlight-color: transparent;
+        transition: width 0.35s ease, background 0.35s ease;
+    }
+
+    .project-dot.is-active {
+        width: 20px;
+        background: #fff;
+    }
+
+    /* --- Effects: keep the mood, drop the cost --- */
+    .scanlines {
+        display: none;
+    }
+
+    .noise-overlay {
+        animation: none;
+        opacity: 0.05;
+    }
+
+    .vignette {
+        background: radial-gradient(circle at 50% 38%, transparent 34%, rgba(0, 0, 0, 0.75) 118%);
+    }
+
+    .bg-mesh {
+        filter: blur(70px);
+    }
+
+    .c1 { width: 70vw; height: 70vw; }
+    .c2 { width: 62vw; height: 62vw; }
+    .c3 { width: 55vw; height: 55vw; }
+
+    /* Without the blur, even 1% transparency lets the page text read through. */
+    #projectDetail {
+        background: #050505;
+        backdrop-filter: none;
+    }
+
+    #projectDetail .detail-reveal {
+        will-change: transform, opacity;
+    }
+
+    /* A card-sized blur behind the contact form is the priciest paint in the
+       section, and nothing meaningful sits behind it to show through. */
+    #contact > div {
+        backdrop-filter: none;
+        background: rgba(255, 255, 255, 0.045);
+    }
+
+    .marquee-content {
+        gap: 1.25rem;
+        padding-right: 1.25rem;
+    }
+
+    /* iOS zooms the page in when a focused field is under 16px. */
+    #contactForm .contact-input {
+        font-size: 16px;
+    }
+
+    .detail-point {
+        padding: 0.85rem 0.9rem;
+        gap: 0.7rem;
+        border-radius: 14px;
+    }
+
+    /* Clear the floating tab bar. */
+    footer {
+        padding-bottom: calc(6.5rem + env(safe-area-inset-bottom, 0px)) !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .marquee-content span {
+        font-size: 1.75rem;
+    }
+
+    .horizontal-item .project-card-body h3 {
+        font-size: 1.5rem;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .scroll-cue span {
+        animation: none;
+    }
+
+    .mnav-pill {
+        transition: none;
+    }
+}
+
