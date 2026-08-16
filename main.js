@@ -3,39 +3,36 @@ document.addEventListener('DOMContentLoaded', () => {
     gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
 
     const isTouch = window.matchMedia('(hover: none), (pointer: coarse)').matches;
-    const isSmallScreen = window.matchMedia('(max-width: 767px)').matches;
+    const isSmallScreen = window.__IS_MOBILE__ || window.matchMedia('(max-width: 767px)').matches;
 
     // The project reels are several MB each — respect metered / slow connections.
     const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
     const saveData = !!connection && (connection.saveData === true ||
         /(^|-)(2g|slow-2g|3g)$/.test(connection.effectiveType || ''));
 
-    // 0. Smooth Scroll (Lenis)
-    const lenis = new Lenis({
-        duration: 1.5,
-        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-        orientation: 'vertical',
-        gestureOrientation: 'vertical',
-        smoothWheel: true,
-        wheelMultiplier: 1,
-        smoothTouch: false,
-        touchMultiplier: 2,
-        infinite: false,
-    });
+    // 0. Smooth Scroll (Lenis) — desktop only. On phones the extra RAF loop
+    // plus a 1.25s tween is what made the tab bar feel a beat behind the tap.
+    let lenis = null;
+    if (!isSmallScreen && typeof Lenis === 'function') {
+        lenis = new Lenis({
+            duration: 1.5,
+            easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+            orientation: 'vertical',
+            gestureOrientation: 'vertical',
+            smoothWheel: true,
+            wheelMultiplier: 1,
+            smoothTouch: false,
+            touchMultiplier: 2,
+            infinite: false,
+        });
 
-    function raf(time) {
-        lenis.raf(time);
-        requestAnimationFrame(raf);
+        lenis.on('scroll', ScrollTrigger.update);
+
+        gsap.ticker.add((time) => {
+            lenis.raf(time * 1000);
+        });
+        gsap.ticker.lagSmoothing(0);
     }
-    requestAnimationFrame(raf);
-
-    lenis.on('scroll', ScrollTrigger.update);
-
-    gsap.ticker.add((time) => {
-        lenis.raf(time * 1000);
-    });
-
-    gsap.ticker.lagSmoothing(0);
 
     if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
 
@@ -59,9 +56,14 @@ document.addEventListener('DOMContentLoaded', () => {
     forceStartAtTop(true);
     window.addEventListener('pageshow', () => forceStartAtTop(true));
 
-    const scrollToSection = (target) => {
+    const scrollToSection = (target, opts = {}) => {
         const el = typeof target === 'string' ? document.querySelector(target) : target;
         if (!el) return;
+        if (isSmallScreen || opts.instant) {
+            const top = el.getBoundingClientRect().top + window.scrollY;
+            window.scrollTo({ top, behavior: opts.instant === false ? 'smooth' : 'auto' });
+            return;
+        }
         if (lenis && typeof lenis.scrollTo === 'function') {
             lenis.scrollTo(el, { offset: 0, duration: 1.25 });
         } else {
@@ -83,7 +85,7 @@ document.addEventListener('DOMContentLoaded', () => {
             loader.style.pointerEvents = 'none';
             gsap.to(loader, {
                 yPercent: -100,
-                duration: 0.9,
+                duration: isSmallScreen ? 0.45 : 0.9,
                 ease: "expo.inOut",
                 onComplete: () => {
                     loader.style.display = 'none';
@@ -97,7 +99,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     tlLoader.to(count, {
         val: 0,
-        duration: 1.8,
+        duration: isSmallScreen ? 0.55 : 1.8,
         ease: "none",
         onUpdate: () => {
             loaderCounter.innerText = "0" + Math.ceil(count.val);
@@ -215,7 +217,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 3. Main Animations
     function initMainAnimations() {
-        AOS.init({ duration: isSmallScreen ? 700 : 1000, once: isSmallScreen });
+        if (!isSmallScreen && typeof AOS !== 'undefined') {
+            AOS.init({ duration: 1000, once: false });
+        } else {
+            document.querySelectorAll('[data-aos]').forEach((el) => {
+                el.classList.add('aos-animate');
+                el.removeAttribute('data-aos');
+            });
+        }
 
         // SplitType Reveal
         const revealTexts = document.querySelectorAll('.reveal-text');
@@ -338,50 +347,51 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // 4. Advanced Cursor Morphing
+    // 4. Advanced Cursor Morphing (pointer devices only — phones have no cursor)
     const cursor = document.querySelector('.cursor');
     const follower = document.querySelector('.cursor-follower');
     const cursorText = document.querySelector('.cursor-text');
 
-    gsap.set([cursor, follower], { xPercent: -50, yPercent: -50 });
+    if (!isTouch && cursor && follower) {
+        gsap.set([cursor, follower], { xPercent: -50, yPercent: -50 });
 
-    window.addEventListener('mousemove', (e) => {
-        gsap.to(cursor, { x: e.clientX, y: e.clientY, duration: 0.1, ease: 'power2.out' });
-        gsap.to(follower, { x: e.clientX, y: e.clientY, duration: 0.35, ease: 'power2.out' });
+        window.addEventListener('mousemove', (e) => {
+            gsap.to(cursor, { x: e.clientX, y: e.clientY, duration: 0.1, ease: 'power2.out' });
+            gsap.to(follower, { x: e.clientX, y: e.clientY, duration: 0.35, ease: 'power2.out' });
 
-        // Attraction to shapes (subtle)
-        floatingShapes.forEach(s => {
-            const dx = (e.clientX / window.innerWidth - 0.5) * 50;
-            const dy = (e.clientY / window.innerHeight - 0.5) * 50;
-            gsap.to(s.mesh.position, { x: s.mesh.position.x + dx * 0.01, y: s.mesh.position.y - dy * 0.01, duration: 2 });
+            floatingShapes.forEach(s => {
+                const dx = (e.clientX / window.innerWidth - 0.5) * 50;
+                const dy = (e.clientY / window.innerHeight - 0.5) * 50;
+                gsap.to(s.mesh.position, { x: s.mesh.position.x + dx * 0.01, y: s.mesh.position.y - dy * 0.01, duration: 2 });
+            });
         });
-    });
 
-    const clickable = document.querySelectorAll('a, .btn-primary, .skill-tag');
-    clickable.forEach(el => {
-        el.addEventListener('mouseenter', () => {
-            cursor.classList.add('active');
-            cursorText.innerText = el.tagName === 'A' ? 'Go' : 'Hi';
-            gsap.to(follower, { scale: 0, opacity: 0 });
+        const clickable = document.querySelectorAll('a, .btn-primary, .skill-tag');
+        clickable.forEach(el => {
+            el.addEventListener('mouseenter', () => {
+                cursor.classList.add('active');
+                cursorText.innerText = el.tagName === 'A' ? 'Go' : 'Hi';
+                gsap.to(follower, { scale: 0, opacity: 0 });
+            });
+            el.addEventListener('mouseleave', () => {
+                cursor.classList.remove('active');
+                gsap.to(follower, { scale: 1, opacity: 1 });
+            });
         });
-        el.addEventListener('mouseleave', () => {
-            cursor.classList.remove('active');
-            gsap.to(follower, { scale: 1, opacity: 1 });
-        });
-    });
 
-    const projects = document.querySelectorAll('.horizontal-item');
-    projects.forEach(p => {
-        p.addEventListener('mouseenter', () => {
-            cursor.classList.add('active');
-            cursorText.innerText = 'View';
-            gsap.to(follower, { scale: 0, opacity: 0 });
+        const projects = document.querySelectorAll('.horizontal-item');
+        projects.forEach(p => {
+            p.addEventListener('mouseenter', () => {
+                cursor.classList.add('active');
+                cursorText.innerText = 'View';
+                gsap.to(follower, { scale: 0, opacity: 0 });
+            });
+            p.addEventListener('mouseleave', () => {
+                cursor.classList.remove('active');
+                gsap.to(follower, { scale: 1, opacity: 1 });
+            });
         });
-        p.addEventListener('mouseleave', () => {
-            cursor.classList.remove('active');
-            gsap.to(follower, { scale: 1, opacity: 1 });
-        });
-    });
+    }
 
     // 6. Project Detail Logic
     const skillIcons = {
@@ -843,6 +853,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }, { passive: true });
     }
 
+    const projects = document.querySelectorAll('.horizontal-item');
     projects.forEach(p => {
         const title = p.querySelector('h3').innerText.trim();
         const cardImg = p.querySelector('img');
@@ -909,12 +920,15 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // 7. Essential Interactions
-    window.addEventListener('scroll', () => {
-        const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
-        const progress = (window.scrollY / totalHeight) * 100;
-        const scrollProgress = document.querySelector('#scrollProgress');
-        if (scrollProgress) scrollProgress.style.width = progress + "%";
-    });
+    const scrollProgress = document.querySelector('#scrollProgress');
+    if (scrollProgress && !isSmallScreen) {
+        window.addEventListener('scroll', () => {
+            const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
+            scrollProgress.style.width = ((window.scrollY / totalHeight) * 100) + "%";
+        }, { passive: true });
+    } else if (scrollProgress) {
+        scrollProgress.style.display = 'none';
+    }
 
     if (!isTouch) {
         const magnets = document.querySelectorAll('.btn-primary, .btn-secondary, #backToTop, nav a');
@@ -1013,19 +1027,39 @@ document.addEventListener('DOMContentLoaded', () => {
         // offsetWidth is 0 until the bar has been laid out
         requestAnimationFrame(() => setActive(activeId));
 
+        let spyLocked = false;
+        let spyUnlockTimer;
+
+        const lockSpy = (ms = 700) => {
+            spyLocked = true;
+            clearTimeout(spyUnlockTimer);
+            spyUnlockTimer = setTimeout(() => { spyLocked = false; }, ms);
+        };
+
+        const goTo = (item) => {
+            const target = document.querySelector(item.getAttribute('href'));
+            if (!target) return;
+            if (navigator.vibrate) navigator.vibrate(8);
+            lockSpy();
+            setActive(item.dataset.section);
+            scrollToSection(target, { instant: true });
+        };
+
         items.forEach(item => {
-            item.addEventListener('click', (e) => {
-                const target = document.querySelector(item.getAttribute('href'));
-                if (!target) return;
+            item.addEventListener('pointerdown', (e) => {
+                if (e.pointerType === 'mouse' && e.button !== 0) return;
                 e.preventDefault();
-                if (navigator.vibrate) navigator.vibrate(8);
-                setActive(item.dataset.section);
-                scrollToSection(target);
+                goTo(item);
+            });
+            item.addEventListener('click', (e) => {
+                e.preventDefault();
+                if (!e.pointerType) goTo(item);
             });
         });
 
         // The band in the middle of the screen decides which tab lights up.
         const spy = new IntersectionObserver((entries) => {
+            if (spyLocked) return;
             entries.forEach(entry => {
                 if (entry.isIntersecting) setActive(entry.target.id);
             });
@@ -1243,6 +1277,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             playground.classList.add('is-ready');
             ready = true;
+            setPhysicsRunning(true);
         };
 
         Events.on(engine, 'afterUpdate', () => {
@@ -1253,7 +1288,16 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
 
-        Runner.run(runner, engine);
+        let physicsRunning = false;
+        const setPhysicsRunning = (on) => {
+            if (on && !physicsRunning) {
+                Runner.run(runner, engine);
+                physicsRunning = true;
+            } else if (!on && physicsRunning) {
+                Runner.stop(runner);
+                physicsRunning = false;
+            }
+        };
 
         // Tilting the handset steers gravity sideways. iOS gates the sensor behind
         // a permission prompt, so it is asked for from the reset button instead of
@@ -1328,13 +1372,13 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         };
 
-        // Start as soon as section is near viewport
+        // Start as soon as section is near viewport, and pause the engine
+        // when the playground leaves the screen so it doesn't tax the tab bar.
         const io = new IntersectionObserver((entries) => {
-            if (entries.some(e => e.isIntersecting)) {
-                start();
-                io.disconnect();
-            }
-        }, { threshold: 0.05, rootMargin: '120px' });
+            const visible = entries.some(e => e.isIntersecting);
+            if (visible && !ready) start();
+            else if (ready) setPhysicsRunning(visible);
+        }, { threshold: 0.05, rootMargin: '80px' });
         io.observe(playground);
 
         // Also start on reset click / if already visible
@@ -1371,31 +1415,58 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     })();
 
-    // 11. Contact Form -> booda2201@gmail.com (FormSubmit)
+    // 11. Contact form — WhatsApp is the reliable send path (FormSubmit
+    // needed a one-time inbox confirmation and often never came back).
     const contactForm = document.querySelector('#contactForm');
     const contactSubmit = document.querySelector('#contactSubmit');
     const contactStatus = document.querySelector('#contactStatus');
-    const contactNext = document.querySelector('#contactNext');
+    const contactName = document.querySelector('#contactName');
+    const contactEmail = document.querySelector('#contactEmail');
+    const contactMessage = document.querySelector('#contactMessage');
 
-    if (contactForm && contactNext) {
-        // Return to this page after FormSubmit finishes
-        contactNext.value = `${window.location.origin}${window.location.pathname}?mail=sent#contact`;
+    const setContactStatus = (text, color) => {
+        if (!contactStatus) return;
+        contactStatus.style.color = color;
+        contactStatus.innerText = text;
+    };
 
-        // Show success after redirect back from FormSubmit
+    if (contactForm && contactSubmit) {
         const params = new URLSearchParams(window.location.search);
-        if (params.get('mail') === 'sent' && contactStatus) {
-            contactStatus.style.color = '#34d399';
-            contactStatus.innerText = 'تم الإرسال بنجاح ✓';
+        if (params.get('mail') === 'sent') {
+            setContactStatus('تم الإرسال بنجاح ✓', '#34d399');
             history.replaceState({}, '', `${window.location.pathname}#contact`);
         }
 
-        contactForm.addEventListener('submit', () => {
-            contactSubmit.disabled = true;
-            contactSubmit.innerText = 'Sending...';
-            if (contactStatus) {
-                contactStatus.style.color = 'rgba(255,255,255,0.7)';
-                contactStatus.innerText = 'جاري الإرسال... لو أول مرة، هيجيلك ميل تفعيل على booda2201@gmail.com';
+        contactForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            const name = (contactName && contactName.value || '').trim();
+            const email = (contactEmail && contactEmail.value || '').trim();
+            const message = (contactMessage && contactMessage.value || '').trim();
+
+            if (!name || !email || !message) {
+                setContactStatus('املأ الاسم والإيميل والرسالة', '#f87171');
+                return;
             }
+
+            const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+            if (!emailOk) {
+                setContactStatus('الإيميل مش صحيح', '#f87171');
+                return;
+            }
+
+            const text = [
+                `مرحبا عبدالرحمن، أنا ${name}`,
+                `الإيميل: ${email}`,
+                '',
+                message
+            ].join('\n');
+
+            const waUrl = `https://wa.me/201127273643?text=${encodeURIComponent(text)}`;
+            const opened = window.open(waUrl, '_blank', 'noopener');
+            if (!opened) window.location.href = waUrl;
+            setContactStatus('هيفتح واتساب لإرسال الرسالة ✓', '#34d399');
+            contactForm.reset();
         });
     }
 });

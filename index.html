@@ -7,6 +7,7 @@
     <title>Abdelrhman Khaled | Frontend Developer 2026</title>
     <script>
         (function () {
+            window.__IS_MOBILE__ = window.matchMedia('(max-width: 767px)').matches;
             if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
             var keepContact = location.hash === '#contact' && /[?&]mail=sent(?:&|$)/.test(location.search);
             if (!keepContact) {
@@ -37,15 +38,8 @@
         }
     </script>
 
-    <!-- AOS CSS -->
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-    
-    <!-- Custom CSS (for effects Tailwind can't easily do) -->
-    <link rel="stylesheet" href="index.css?v=6">
-
-    <!-- Dependencies -->
-    <script src="https://unpkg.com/split-type"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <link rel="stylesheet" href="index.css?v=9">
 </head>
 <body class="bg-dark text-white font-sans overflow-x-hidden cursor-none">
     
@@ -66,10 +60,10 @@
         <span class="cursor-text opacity-0">View</span>
     </div>
     <div class="cursor-follower"></div>
-    <div class="noise-overlay"></div>
-    <div class="scanlines"></div>
+    <div class="noise-overlay desktop-fx"></div>
+    <div class="scanlines desktop-fx"></div>
     <div class="vignette"></div>
-    <div id="lightLeak" class="fixed inset-0 z-[9996] pointer-events-none opacity-20 bg-gradient-to-tr from-primary/20 via-transparent to-accent/20 mix-blend-screen"></div>
+    <div id="lightLeak" class="desktop-fx fixed inset-0 z-[9996] pointer-events-none opacity-20 bg-gradient-to-tr from-primary/20 via-transparent to-accent/20 mix-blend-screen"></div>
 
     <!-- Background Meshes -->
     <div class="bg-mesh">
@@ -77,7 +71,6 @@
         <div class="mesh-circle c2 opacity-40"></div>
         <div class="mesh-circle c3 opacity-40"></div>
     </div>
-    <canvas id="particles" class="fixed top-0 left-0 w-full h-full z-[-1] pointer-events-none opacity-30"></canvas>
 
     <!-- Navigation -->
     <nav class="fixed top-0 left-0 w-full p-5 md:p-8 z-[20003] flex justify-between items-center mix-blend-difference">
@@ -130,10 +123,10 @@
     </div>
 
     <!-- Hero Section -->
-    <section id="home" class="hero-section flex flex-col justify-center items-center text-center px-5 md:px-[10%] pt-24 pb-12 md:py-0 relative rounded-b-[40px] md:rounded-b-[60px] overflow-hidden" style="background-image: linear-gradient(to bottom, rgba(5,5,5,0.82), rgba(5,5,5,0.96)), url('https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&q=80&w=1920'); background-size: cover; background-position: center;">
+    <section id="home" class="hero-section flex flex-col justify-center items-center text-center px-5 md:px-[10%] pt-24 pb-12 md:py-0 relative rounded-b-[40px] md:rounded-b-[60px] overflow-hidden">
         <div class="hero-portrait relative mb-8 md:mb-8" data-aos="zoom-in">
             <div class="hero-portrait-frame w-44 h-44 sm:w-48 sm:h-48 md:w-48 md:h-48 rounded-full overflow-hidden">
-                <img src="https://github.com/booda2201-tech.png" alt="Abdelrhman Khaled" class="w-full h-full object-cover object-top">
+                <img src="https://github.com/booda2201-tech.png" alt="Abdelrhman Khaled" class="w-full h-full object-cover object-top" width="192" height="192" decoding="async">
             </div>
             <div class="hero-available">Available</div>
         </div>
@@ -195,7 +188,7 @@
                 </div>
                 <!-- Project 2: Rebhny -->
                 <div class="horizontal-item h-[50vh] md:h-[60vh] relative group overflow-hidden rounded-[24px] md:rounded-[32px] border border-white/10 backdrop-blur-md bg-white/5 p-6 md:p-8 flex flex-col justify-end cursor-pointer">
-                    <img src="assets/imges/r1.png" alt="Rebhny Auction" class="absolute inset-0 w-full h-full object-cover z-[-1] opacity-40 group-hover:opacity-60 group-hover:scale-110 transition-all duration-700">
+                    <img src="assets/imges/r1.png" alt="Rebhny Auction" class="absolute inset-0 w-full h-full object-cover z-[-1] opacity-40 group-hover:opacity-60 group-hover:scale-110 transition-all duration-700" loading="lazy" decoding="async">
                     <div class="project-card-body z-10 translate-y-4 group-hover:translate-y-0 transition-all duration-500">
                         <h3 class="text-2xl md:text-3xl font-bold mb-1">REBHNY</h3>
                         <p class="text-sm opacity-70 mb-3" dir="rtl">منصة مزايدات حية مع Socket.io ولوحة تحكم احترافية.</p>
@@ -204,7 +197,7 @@
                 </div>
                 <!-- Project 3: Fortno -->
                 <div class="horizontal-item h-[50vh] md:h-[60vh] relative group overflow-hidden rounded-[24px] md:rounded-[32px] border border-white/10 backdrop-blur-md bg-white/5 p-6 md:p-8 flex flex-col justify-end cursor-pointer">
-                    <img src="assets/imges/f1.png" alt="Fortno Car Care" class="absolute inset-0 w-full h-full object-cover z-[-1] opacity-40 group-hover:opacity-60 group-hover:scale-110 transition-all duration-700">
+                    <img src="assets/imges/f1.png" alt="Fortno Car Care" class="absolute inset-0 w-full h-full object-cover z-[-1] opacity-40 group-hover:opacity-60 group-hover:scale-110 transition-all duration-700" loading="lazy" decoding="async">
                     <div class="project-card-body z-10 translate-y-4 group-hover:translate-y-0 transition-all duration-500">
                         <h3 class="text-2xl md:text-3xl font-bold mb-1">FORTNO</h3>
                         <p class="text-sm opacity-70 mb-3" dir="rtl">واجهة فاخرة لعلامة فورتو للعناية بالسيارات.</p>
@@ -213,7 +206,7 @@
                 </div>
                 <!-- Project 4: Al Hendal -->
                 <div class="horizontal-item h-[50vh] md:h-[60vh] relative group overflow-hidden rounded-[24px] md:rounded-[32px] border border-white/10 backdrop-blur-md bg-white/5 p-6 md:p-8 flex flex-col justify-end cursor-pointer">
-                    <img src="assets/imges/a1.png" alt="Al Hendal" class="absolute inset-0 w-full h-full object-cover z-[-1] opacity-40 group-hover:opacity-60 group-hover:scale-110 transition-all duration-700">
+                    <img src="assets/imges/a1.png" alt="Al Hendal" class="absolute inset-0 w-full h-full object-cover z-[-1] opacity-40 group-hover:opacity-60 group-hover:scale-110 transition-all duration-700" loading="lazy" decoding="async">
                     <div class="project-card-body z-10 translate-y-4 group-hover:translate-y-0 transition-all duration-500">
                         <h3 class="text-2xl md:text-3xl font-bold mb-1">AL HENDAL</h3>
                         <p class="text-sm opacity-70 mb-3" dir="rtl">موقع ثنائي اللغة لمجموعة الهندال مع GSAP و RTL/LTR.</p>
@@ -231,7 +224,7 @@
                 </div>
                 <!-- Project 6: Moonlight Events -->
                 <div class="horizontal-item h-[50vh] md:h-[60vh] relative group overflow-hidden rounded-[24px] md:rounded-[32px] border border-white/10 backdrop-blur-md bg-white/5 p-6 md:p-8 flex flex-col justify-end cursor-pointer">
-                    <img src="assets/imges/moon1.png" alt="Moonlight Events" class="absolute inset-0 w-full h-full object-cover z-[-1] opacity-40 group-hover:opacity-60 group-hover:scale-110 transition-all duration-700">
+                    <img src="assets/imges/moon1.png" alt="Moonlight Events" class="absolute inset-0 w-full h-full object-cover z-[-1] opacity-40 group-hover:opacity-60 group-hover:scale-110 transition-all duration-700" loading="lazy" decoding="async">
                     <div class="project-card-body z-10 translate-y-4 group-hover:translate-y-0 transition-all duration-500">
                         <h3 class="text-2xl md:text-3xl font-bold mb-1">MOONLIGHT</h3>
                         <p class="text-sm opacity-70 mb-3" dir="rtl">منصة سعودية لإدارة الفعاليات الكبرى بتصميم Dark Mode.</p>
@@ -240,7 +233,7 @@
                 </div>
                 <!-- Project 7: Viganium AI -->
                 <div class="horizontal-item h-[50vh] md:h-[60vh] relative group overflow-hidden rounded-[24px] md:rounded-[32px] border border-white/10 backdrop-blur-md bg-white/5 p-6 md:p-8 flex flex-col justify-end cursor-pointer">
-                    <img src="assets/imges/vig1.png" alt="Viganium AI" class="absolute inset-0 w-full h-full object-cover z-[-1] opacity-40 group-hover:opacity-60 group-hover:scale-110 transition-all duration-700">
+                    <img src="assets/imges/vig1.png" alt="Viganium AI" class="absolute inset-0 w-full h-full object-cover z-[-1] opacity-40 group-hover:opacity-60 group-hover:scale-110 transition-all duration-700" loading="lazy" decoding="async">
                     <div class="project-card-body z-10 translate-y-4 group-hover:translate-y-0 transition-all duration-500">
                         <h3 class="text-2xl md:text-3xl font-bold mb-1">VIGANIUM AI</h3>
                         <p class="text-sm opacity-70 mb-3" dir="rtl">حلول برمجية وذكاء اصطناعي بعناصر ثلاثية الأبعاد.</p>
@@ -249,7 +242,7 @@
                 </div>
                 <!-- Project 8: Gulf Food Factory -->
                 <div class="horizontal-item h-[50vh] md:h-[60vh] relative group overflow-hidden rounded-[24px] md:rounded-[32px] border border-white/10 backdrop-blur-md bg-white/5 p-6 md:p-8 flex flex-col justify-end cursor-pointer">
-                    <img src="assets/imges/gf1.png" alt="Gulf Food Factory" class="absolute inset-0 w-full h-full object-cover z-[-1] opacity-40 group-hover:opacity-60 group-hover:scale-110 transition-all duration-700">
+                    <img src="assets/imges/gf1.png" alt="Gulf Food Factory" class="absolute inset-0 w-full h-full object-cover z-[-1] opacity-40 group-hover:opacity-60 group-hover:scale-110 transition-all duration-700" loading="lazy" decoding="async">
                     <div class="project-card-body z-10 translate-y-4 group-hover:translate-y-0 transition-all duration-500">
                         <h3 class="text-2xl md:text-3xl font-bold mb-1">GULF FOOD</h3>
                         <p class="text-sm opacity-70 mb-3" dir="rtl">واجهة رقمية لمصنع أغذية مع كتالوج وشهادات عالمية.</p>
@@ -302,12 +295,8 @@
         <div class="backdrop-blur-2xl bg-white/5 border border-white/10 p-6 md:p-10 rounded-[28px] md:rounded-[36px] max-w-3xl w-full" data-aos="zoom-in">
             <h2 class="text-3xl md:text-5xl font-black mb-4 md:mb-5 reveal-text">LET'S CONNECT.</h2>
 
-            <form id="contactForm" action="https://formsubmit.co/booda2201@gmail.com" method="POST" class="text-left space-y-2.5 mb-4 md:mb-5">
+            <form id="contactForm" class="text-left space-y-2.5 mb-4 md:mb-5" novalidate>
                 <input type="hidden" name="_subject" value="New message from portfolio">
-                <input type="hidden" name="_template" value="table">
-                <input type="hidden" name="_captcha" value="false">
-                <input type="hidden" name="_next" id="contactNext" value="">
-                <input type="text" name="_honey" class="hidden" tabindex="-1" autocomplete="off">
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-2.5">
                     <input id="contactName" name="name" type="text" required placeholder="Name"
@@ -319,7 +308,7 @@
                     class="contact-input w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-2.5 text-sm outline-none focus:border-primary transition-colors placeholder:opacity-40 resize-none"></textarea>
                 <div class="flex flex-col sm:flex-row sm:items-center gap-2">
                     <button id="contactSubmit" type="submit" class="btn-primary bg-white text-dark px-7 py-2.5 rounded-full font-bold hover:bg-primary hover:text-white border border-transparent transition-all text-sm">
-                        Send Message
+                        Send on WhatsApp
                     </button>
                     <p id="contactStatus" class="text-xs opacity-80 text-center sm:text-left" aria-live="polite"></p>
                 </div>
@@ -408,17 +397,19 @@
         </svg>
     </button>
 
-    <!-- External Libraries -->
-    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- External Libraries — Three.js + Lenis stay desktop-only (they were ~1MB unused on phones). -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollToPlugin.min.js"></script>
-    <script src="https://unpkg.com/three@0.150.1/build/three.min.js"></script>
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script src="https://unpkg.com/split-type"></script>
-    <script src="https://unpkg.com/@studio-freight/lenis@1.0.33/dist/lenis.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js"></script>
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-    <script src="main.js?v=6"></script>
+    <script>
+        if (!window.__IS_MOBILE__) {
+            document.write('<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"><\/script>');
+            document.write('<script src="https://unpkg.com/three@0.150.1/build/three.min.js"><\/script>');
+            document.write('<script src="https://unpkg.com/@studio-freight/lenis@1.0.33/dist/lenis.min.js"><\/script>');
+        }
+    </script>
+    <script src="main.js?v=7"></script>
 </body>
 </html>
