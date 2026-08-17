@@ -147,8 +147,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const body = document.createElement('div');
         body.className = 'pcard-body';
         body.innerHTML = `
-            <h2 class="pcard-title">${project.title}</h2>
-            <p class="pcard-tag">${project.tag}</p>
+            <div class="pcard-head">
+                <h2 class="pcard-title">${project.title}</h2>
+                <p class="pcard-tag">${project.tag}</p>
+            </div>
             <p class="pcard-blurb" data-i18n="${project.blurb}">${window.t(project.blurb)}</p>
             <div class="pcard-stack">${project.stack.map(s => `<span>${s}</span>`).join('')}</div>
             <div class="pcard-actions">
@@ -182,6 +184,9 @@ document.addEventListener('DOMContentLoaded', () => {
         row.href = 'index.html?project=' + encodeURIComponent(project.key);
         row.innerHTML = `
             <span class="pindex-num">${pad(index + 1)}</span>
+            <span class="pindex-thumb" aria-hidden="true">
+                <img src="${project.cover}" alt="" loading="lazy" decoding="async">
+            </span>
             <span class="pindex-title">${project.title}</span>
             <span class="pindex-meta">
                 <span class="pindex-stack">${project.stack.slice(0, 2).join(' · ')}</span>
@@ -528,7 +533,7 @@ document.addEventListener('DOMContentLoaded', () => {
         };
         requestAnimationFrame(tick);
 
-        const hoverTargets = '.pcard-media, .pcard-btn, .archive-chip, .archive-back, .archive-cta-btn, .archive-nav-links a, .lang-toggle button, .view-toggle button, #backToTop';
+        const hoverTargets = '.pcard-media, .pcard-btn, .archive-chip, .archive-back, .archive-nav-links a, .lang-toggle button, .view-toggle button, #backToTop';
         document.addEventListener('mouseover', (e) => {
             if (e.target.closest(hoverTargets)) cursor.classList.add('active');
         });

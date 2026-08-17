@@ -494,6 +494,12 @@ html[dir="rtl"] .pindex-row:hover .pindex-title {
     display: none;
 }
 
+/* Pointer devices get the cursor-following preview instead, so the inline
+   thumbnail only earns its space on touch layouts. */
+.pindex-thumb {
+    display: none;
+}
+
 .pindex-cat {
     padding: 0.3rem 0.75rem;
     border-radius: 999px;
@@ -740,6 +746,12 @@ html[dir="rtl"] .pcard-open svg {
     flex: 1;
 }
 
+.pcard-head {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+}
+
 .pcard-title {
     font-size: 1.35rem;
     font-weight: 900;
@@ -754,7 +766,6 @@ html[dir="rtl"] .pcard-open svg {
     letter-spacing: 0.2em;
     text-transform: uppercase;
     opacity: 0.45;
-    margin-top: -0.55rem;
 }
 
 .pcard-blurb {
@@ -828,79 +839,6 @@ html[dir="rtl"] .pcard-open svg {
     padding: 0 6% 4rem;
 }
 
-/* --- Closing CTA --- */
-.archive-cta {
-    padding: 3.5rem 6% 4rem;
-}
-
-.archive-cta-card {
-    position: relative;
-    overflow: hidden;
-    max-width: 46rem;
-    margin: 0 auto;
-    text-align: center;
-    padding: 2.5rem 1.75rem 2.75rem;
-    border-radius: 30px;
-    border: 1px solid rgba(255, 255, 255, 0.16);
-    background: linear-gradient(155deg, rgba(255, 255, 255, 0.13), rgba(255, 255, 255, 0.03) 45%, rgba(139, 92, 246, 0.09));
-    backdrop-filter: blur(20px) saturate(150%);
-    -webkit-backdrop-filter: blur(20px) saturate(150%);
-    box-shadow: 0 28px 70px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.24);
-}
-
-.archive-cta-shine {
-    pointer-events: none;
-    position: absolute;
-    inset: -40% -20% auto;
-    height: 70%;
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.2), transparent 70%);
-    transform: rotate(-8deg);
-    opacity: 0.5;
-}
-
-.archive-cta-title,
-.archive-cta-text,
-.archive-cta-btn {
-    position: relative;
-    z-index: 1;
-}
-
-.archive-cta-title {
-    font-size: clamp(1.6rem, 4vw, 2.8rem);
-    font-weight: 900;
-    letter-spacing: -0.03em;
-    line-height: 1.15;
-    text-transform: uppercase;
-}
-
-.archive-cta-text {
-    opacity: 0.6;
-    margin: 0.85rem auto 1.75rem;
-    max-width: 34rem;
-    line-height: 1.8;
-}
-
-.archive-cta-btn {
-    display: inline-block;
-    background: #fff;
-    color: #050505;
-    border-radius: 999px;
-    padding: 0.85rem 2rem;
-    font-size: 0.72rem;
-    font-weight: 800;
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
-    border: 1px solid #fff;
-    transition: background 0.25s ease, color 0.25s ease, transform 0.25s ease;
-}
-
-.archive-cta-btn:hover {
-    background: var(--primary);
-    border-color: var(--primary);
-    color: #fff;
-    transform: translateY(-2px);
-}
-
 .archive-footer {
     text-align: center;
     padding: 2rem 6% 3rem;
@@ -942,8 +880,19 @@ html[dir="rtl"] .pcard-open svg {
 
 /* --- Mobile --- */
 @media (max-width: 767px) {
+    /* Two 1fr tracks always match the wider one, so the action pills alone were
+       forcing the nav past the viewport. A flex row claims only what it has. */
     .archive-nav {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.75rem;
         padding: 1rem 5%;
+    }
+
+    /* Home is already one tap away on the logo and in the bottom nav. */
+    .archive-back {
+        display: none;
     }
 
     .archive-head {
@@ -998,17 +947,50 @@ html[dir="rtl"] .pcard-open svg {
         padding: 0.5rem 5% 2.5rem;
     }
 
+    /* A scannable list: number and thumbnail on the leading edge, name and meta
+       stacked beside them, so eight projects fit in a couple of screens. */
     .pindex-row {
-        grid-template-columns: auto 1fr auto;
-        gap: 0.85rem;
-        padding: 1.15rem 0.25rem;
+        grid-template-columns: auto 4.75rem 1fr;
+        grid-template-areas:
+            "num thumb title"
+            "num thumb meta";
+        align-items: center;
+        gap: 0.3rem 0.85rem;
+        padding: 0.9rem 0.25rem;
+    }
+
+    .pindex-num {
+        grid-area: num;
+    }
+
+    .pindex-thumb {
+        grid-area: thumb;
+        display: block;
+        aspect-ratio: 4 / 3;
+        border-radius: 12px;
+        overflow: hidden;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        background: #0b0b0f;
+    }
+
+    .pindex-thumb img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: top center;
+        opacity: 0.9;
     }
 
     .pindex-title {
-        font-size: 1.45rem;
+        grid-area: title;
+        align-self: end;
+        font-size: 1.05rem;
+        line-height: 1.15;
     }
 
     .pindex-meta {
+        grid-area: meta;
+        align-self: start;
         gap: 0.5rem;
         font-size: 0.55rem;
     }
@@ -1030,26 +1012,68 @@ html[dir="rtl"] .pcard-open svg {
         border-radius: 22px;
     }
 
+    /* Poster card: the artwork gets more room and the name rides its bottom
+       edge, so each project reads as one block instead of an image sitting on
+       top of a paragraph. */
+    .pcard-media {
+        aspect-ratio: 4 / 3;
+    }
+
     .pcard-body {
-        padding: 1.15rem 1.15rem 1.3rem;
+        padding: 0 1.1rem 1.15rem;
+        gap: 0.65rem;
+    }
+
+    .pcard-head {
+        position: relative;
+        z-index: 2;
+        margin-top: -3.75rem;
+        text-shadow: 0 2px 14px rgba(0, 0, 0, 0.65);
     }
 
     .pcard-title {
-        font-size: 1.25rem;
+        font-size: 1.3rem;
+    }
+
+    .pcard-tag {
+        opacity: 0.7;
+    }
+
+    .pcard-blurb {
+        font-size: 0.88rem;
+        line-height: 1.6;
+        /* Two lines are enough of a hook on a phone; the case study has the rest. */
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+        overflow: hidden;
+    }
+
+    .pcard-stack {
+        flex-wrap: nowrap;
+        overflow: hidden;
+        padding-top: 0;
+    }
+
+    .pcard-stack span:nth-child(n + 4) {
+        display: none;
+    }
+
+    .pcard-actions {
+        flex-wrap: nowrap;
+        padding-top: 0.35rem;
+    }
+
+    .pcard-btn {
+        flex: 1 1 0;
+        padding: 0.62rem 0.5rem;
+        font-size: 0.62rem;
+        letter-spacing: 0.1em;
     }
 
     .pcard-open {
         opacity: 1;
         transform: none;
-    }
-
-    .archive-cta {
-        padding: 2.5rem 5% 3rem;
-    }
-
-    .archive-cta-card {
-        padding: 1.9rem 1.25rem 2.1rem;
-        border-radius: 24px;
     }
 }
 
@@ -1092,14 +1116,6 @@ html[dir="rtl"] .archive-title {
     line-height: 1.25;
 }
 
-html[dir="rtl"] .archive-cta-title {
-    font-style: normal;
-    letter-spacing: 0;
-    text-transform: none;
-    font-weight: 800;
-    line-height: 1.35;
-}
-
 html[dir="rtl"] .archive-eyebrow,
 html[dir="rtl"] .archive-back,
 html[dir="rtl"] .archive-nav-links,
@@ -1111,8 +1127,7 @@ html[dir="rtl"] .pcard-cat,
 html[dir="rtl"] .pcard-tag,
 html[dir="rtl"] .pcard-btn,
 html[dir="rtl"] .pindex-num,
-html[dir="rtl"] .pindex-cat,
-html[dir="rtl"] .archive-cta-btn {
+html[dir="rtl"] .pindex-cat {
     letter-spacing: 0;
     text-transform: none;
     font-weight: 700;
@@ -1124,8 +1139,7 @@ html[dir="rtl"] .archive-ghost {
 }
 
 html[dir="rtl"] .archive-lead,
-html[dir="rtl"] .pcard-blurb,
-html[dir="rtl"] .archive-cta-text {
+html[dir="rtl"] .pcard-blurb {
     line-height: 1.9;
 }
 
