@@ -7,6 +7,10 @@
     <title>Abdelrhman Khaled | Frontend Developer 2026</title>
     <script>
         (function () {
+            var lang = 'en';
+            try { lang = localStorage.getItem('lang') === 'ar' ? 'ar' : 'en'; } catch (e) {}
+            document.documentElement.lang = lang;
+            document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
             window.__IS_MOBILE__ = window.matchMedia('(max-width: 767px)').matches;
             if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
             var keepContact = location.hash === '#contact' && /[?&]mail=sent(?:&|$)/.test(location.search);
@@ -31,7 +35,7 @@
                         dark: '#050505',
                     },
                     fontFamily: {
-                        sans: ['Outfit', 'sans-serif'],
+                        sans: ['Outfit', 'Tajawal', 'sans-serif'],
                     }
                 }
             }
@@ -39,7 +43,7 @@
     </script>
 
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-    <link rel="stylesheet" href="index.css?v=9">
+    <link rel="stylesheet" href="index.css?v=22">
 </head>
 <body class="bg-dark text-white font-sans overflow-x-hidden cursor-none">
     
@@ -51,11 +55,11 @@
             <span id="loaderCounter" class="text-6xl md:text-8xl font-black italic tracking-tighter">03</span>
         </div>
         <div class="mt-8 overflow-hidden">
-            <p class="loader-text text-xs tracking-[0.3em] uppercase opacity-50">Initializing Cinematic Experience</p>
+            <p class="loader-text text-xs tracking-[0.3em] uppercase opacity-50" data-i18n="loader.text">Initializing Cinematic Experience</p>
         </div>
     </div>
 
-    <div id="scrollProgress" class="fixed top-0 left-0 h-1 bg-gradient-to-r from-primary via-secondary to-accent z-[10001] w-0 transition-all duration-100"></div>
+    <div id="scrollProgress" class="fixed top-0 start-0 h-1 bg-gradient-to-r from-primary via-secondary to-accent z-[10001] w-0 transition-all duration-100"></div>
     <div class="cursor flex items-center justify-center text-[8px] font-bold uppercase tracking-widest text-dark overflow-hidden transition-all duration-300">
         <span class="cursor-text opacity-0">View</span>
     </div>
@@ -71,22 +75,22 @@
         <div class="mesh-circle c2 opacity-40"></div>
         <div class="mesh-circle c3 opacity-40"></div>
     </div>
-
     <!-- Navigation -->
-    <nav class="fixed top-0 left-0 w-full p-5 md:p-8 z-[20003] flex justify-between items-center mix-blend-difference">
-        <div class="text-2xl font-black italic tracking-tighter cursor-pointer" id="logo">AK.</div>
-        <div class="hidden md:flex gap-8 text-xs font-bold uppercase tracking-[0.3em]">
-            <a href="#home" class="hover:text-primary transition-colors">Home</a>
-            <a href="#work" class="hover:text-primary transition-colors">Work</a>
-            <a href="#about" class="hover:text-primary transition-colors">About</a>
-            <a href="#contact" class="hover:text-primary transition-colors">Contact</a>
+    <nav class="fixed top-0 left-0 w-full p-5 md:p-8 z-[20003] grid grid-cols-[1fr_auto_1fr] items-center gap-4">
+        <div class="col-start-1 text-2xl font-black italic tracking-tighter cursor-pointer justify-self-start" id="logo">AK.</div>
+        <div class="col-start-2 hidden md:flex gap-8 text-xs font-bold uppercase tracking-[0.3em] justify-self-center whitespace-nowrap">
+            <a href="#home" class="hover:text-primary transition-colors" data-i18n="nav.home">Home</a>
+            <a href="#work" class="hover:text-primary transition-colors" data-i18n="nav.work">Work</a>
+            <a href="#about" class="hover:text-primary transition-colors" data-i18n="nav.about">About</a>
+            <a href="#contact" class="hover:text-primary transition-colors" data-i18n="nav.contact">Contact</a>
         </div>
-        <button id="menuToggle" class="w-12 h-12 hidden md:flex flex-col items-end justify-center gap-1 group">
-            <span class="w-8 h-[2px] bg-white transition-all group-hover:w-12"></span>
-            <span class="w-12 h-[2px] bg-white"></span>
-            <span class="w-6 h-[2px] bg-white transition-all group-hover:w-12"></span>
-        </button>
-        <a href="cv.html" target="_blank" rel="noopener noreferrer" class="md:hidden text-[10px] font-bold uppercase tracking-[0.25em] border border-white/30 rounded-full px-4 py-2">CV</a>
+        <div class="col-start-3 flex items-center gap-2 md:gap-3 justify-self-end">
+            <div id="langToggle" class="lang-toggle" role="group" aria-label="Language">
+                <button type="button" data-lang="en" class="is-active">EN</button>
+                <button type="button" data-lang="ar">عربي</button>
+            </div>
+            <a href="cv.html" target="_blank" rel="noopener noreferrer" class="nav-cv md:hidden">CV</a>
+        </div>
     </nav>
 
     <!-- Mobile Bottom Navigation -->
@@ -95,32 +99,22 @@
             <span class="mnav-pill" aria-hidden="true"></span>
             <a class="mnav-item is-active" href="#home" data-section="home">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10.6 12 3.4l9 7.2"/><path d="M5.4 9.4V20h13.2V9.4"/></svg>
-                <span>Home</span>
+                <span data-i18n="nav.home">Home</span>
             </a>
             <a class="mnav-item" href="#work" data-section="work">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.2" y="4" width="7.2" height="7.2" rx="1.6"/><rect x="13.6" y="4" width="7.2" height="7.2" rx="1.6"/><rect x="3.2" y="13.6" width="7.2" height="6.4" rx="1.6"/><rect x="13.6" y="13.6" width="7.2" height="6.4" rx="1.6"/></svg>
-                <span>Work</span>
+                <span data-i18n="nav.work">Work</span>
             </a>
             <a class="mnav-item" href="#about" data-section="about">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8.2" r="3.6"/><path d="M4.6 20c0-3.7 3.3-6.2 7.4-6.2s7.4 2.5 7.4 6.2"/></svg>
-                <span>About</span>
+                <span data-i18n="nav.about">About</span>
             </a>
             <a class="mnav-item" href="#contact" data-section="contact">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5.6" width="18" height="12.8" rx="2.6"/><path d="m3.9 7.4 8.1 5.8 8.1-5.8"/></svg>
-                <span>Contact</span>
+                <span data-i18n="nav.contact">Contact</span>
             </a>
         </div>
     </nav>
-
-    <!-- Fullscreen Menu -->
-    <div id="fsMenu" class="fixed inset-0 z-[20002] bg-dark/95 backdrop-blur-3xl translate-x-full transition-transform duration-1000 ease-[cubic-bezier(0.85,0,0.15,1)] flex items-center px-8 md:px-[10%]">
-        <div class="space-y-1 md:space-y-4">
-            <a href="#home" class="menu-link block text-5xl sm:text-6xl md:text-8xl font-black italic hover:text-primary transition-colors py-3 translate-x-20 opacity-0">HOME</a>
-            <a href="#work" class="menu-link block text-5xl sm:text-6xl md:text-8xl font-black italic hover:text-primary transition-colors py-3 translate-x-20 opacity-0">WORK</a>
-            <a href="#about" class="menu-link block text-5xl sm:text-6xl md:text-8xl font-black italic hover:text-primary transition-colors py-3 translate-x-20 opacity-0">ABOUT</a>
-            <a href="#contact" class="menu-link block text-5xl sm:text-6xl md:text-8xl font-black italic hover:text-primary transition-colors py-3 translate-x-20 opacity-0">CONTACT</a>
-        </div>
-    </div>
 
     <!-- Hero Section -->
     <section id="home" class="hero-section flex flex-col justify-center items-center text-center px-5 md:px-[10%] pt-24 pb-12 md:py-0 relative rounded-b-[40px] md:rounded-b-[60px] overflow-hidden">
@@ -128,125 +122,91 @@
             <div class="hero-portrait-frame w-44 h-44 sm:w-48 sm:h-48 md:w-48 md:h-48 rounded-full overflow-hidden">
                 <img src="https://github.com/booda2201-tech.png" alt="Abdelrhman Khaled" class="w-full h-full object-cover object-top" width="192" height="192" decoding="async">
             </div>
-            <div class="hero-available">Available</div>
+            <div class="hero-available" data-i18n="hero.available">Available</div>
         </div>
-        <h1 class="text-[2.7rem] sm:text-6xl md:text-8xl lg:text-9xl font-black leading-[0.88] mb-5 md:mb-8 hero-title" data-aos="zoom-out" data-aos-duration="1500">FRONTEND<br>DEVELOPER.</h1>
-        <p class="text-[0.95rem] leading-relaxed md:text-xl max-w-[22.5rem] md:max-w-3xl lg:max-w-4xl opacity-80 mb-7 md:mb-10" data-aos="fade-up" data-aos-delay="400">I am <strong>Abdelrhman Khaled</strong>, a frontend developer specializing in Angular, TypeScript, and pixel-perfect user experiences — building modern, high-performance web interfaces.</p>
+        <h1 class="hero-title font-black mb-5 md:mb-8" data-aos="zoom-out" data-aos-duration="1500" data-i18n-html="hero.title">FRONTEND<br>DEVELOPER.</h1>
+        <p class="hero-bio opacity-80 mb-7 md:mb-10" data-aos="fade-up" data-aos-delay="400" data-i18n-html="hero.bio">I am <strong>Abdelrhman Khaled</strong>, a frontend developer specializing in Angular, TypeScript, and pixel-perfect user experiences — building modern, high-performance web interfaces.</p>
         <div class="hero-actions flex flex-row gap-3 w-full max-w-sm md:max-w-none md:w-auto" data-aos="fade-up" data-aos-delay="600">
-            <a href="#work" id="viewProjectsBtn" class="btn-primary flex-1 md:flex-none bg-white text-dark px-5 py-3.5 md:px-10 md:py-4 rounded-full font-bold inline-block text-center hover:bg-transparent hover:text-white border border-transparent hover:border-white transition-all transform hover:-translate-y-1">View Projects</a>
-            <a href="cv.html" target="_blank" rel="noopener noreferrer" class="btn-secondary flex-1 md:flex-none bg-transparent text-white border border-white/20 px-5 py-3.5 md:px-10 md:py-4 rounded-full font-bold inline-block text-center hover:bg-white hover:text-dark transition-all transform hover:-translate-y-1">View CV</a>
+            <a href="#work" id="viewProjectsBtn" class="btn-primary flex-1 md:flex-none bg-white text-dark px-5 py-3.5 md:px-10 md:py-4 rounded-full font-bold inline-block text-center hover:bg-transparent hover:text-white border border-transparent hover:border-white transition-all transform hover:-translate-y-1" data-i18n="hero.projects">View Projects</a>
+            <a href="cv.html" target="_blank" rel="noopener noreferrer" class="btn-secondary flex-1 md:flex-none bg-transparent text-white border border-white/20 px-5 py-3.5 md:px-10 md:py-4 rounded-full font-bold inline-block text-center hover:bg-white hover:text-dark transition-all transform hover:-translate-y-1" data-i18n="hero.cv">View CV</a>
         </div>
     </section>
 
     <!-- Scrolling Marquee -->
-    <div class="marquee py-8 md:py-12 bg-white/5 border-y border-white/10 overflow-hidden select-none" aria-hidden="true">
+    <div class="marquee select-none" aria-hidden="true">
+        <svg class="marquee-mark" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true">
+            <path d="M22 16h14a10 10 0 010 20H20a8 8 0 110-16h18" stroke-linecap="round"/>
+        </svg>
         <div class="marquee-track">
             <div class="marquee-content">
-                <span>Creative Development</span>
-                <span>•</span>
-                <span>Immersive Experiences</span>
-                <span>•</span>
-                <span>UI/UX Strategy</span>
-                <span>•</span>
-                <span>Future of Web</span>
-                <span>•</span>
+                <span data-i18n="mq.1">Creative Development</span>
+                <span class="marquee-sep">▪</span>
+                <span data-i18n="mq.2">Immersive Experiences</span>
+                <span class="marquee-sep">▪</span>
+                <span data-i18n="mq.3">UI/UX Strategy</span>
+                <span class="marquee-sep">▪</span>
+                <span data-i18n="mq.4">Future of Web</span>
+                <span class="marquee-sep">▪</span>
             </div>
             <div class="marquee-content">
-                <span>Creative Development</span>
-                <span>•</span>
-                <span>Immersive Experiences</span>
-                <span>•</span>
-                <span>UI/UX Strategy</span>
-                <span>•</span>
-                <span>Future of Web</span>
-                <span>•</span>
+                <span data-i18n="mq.1">Creative Development</span>
+                <span class="marquee-sep">▪</span>
+                <span data-i18n="mq.2">Immersive Experiences</span>
+                <span class="marquee-sep">▪</span>
+                <span data-i18n="mq.3">UI/UX Strategy</span>
+                <span class="marquee-sep">▪</span>
+                <span data-i18n="mq.4">Future of Web</span>
+                <span class="marquee-sep">▪</span>
             </div>
         </div>
     </div>
 
     <!-- Work Section -->
     <section id="work" class="py-16 md:py-24 md:min-h-screen flex flex-col justify-center overflow-hidden">
-        <div class="px-6 md:px-[10%] mb-8 md:mb-12">
-            <h2 class="text-4xl md:text-7xl font-extrabold section-title reveal-text" data-aos="fade-right">SELECTED<br>PROJECTS</h2>
-            <p class="swipe-hint mt-5 text-[10px] font-bold uppercase tracking-[0.25em] opacity-45">
-                <span>08 Projects</span>
-                <span class="swipe-hint-rule"></span>
-                <span>Swipe to browse</span>
-            </p>
+        <div class="work-head px-6 md:px-[10%] mb-8 md:mb-12">
+            <h2 class="section-title reveal-text font-extrabold" data-aos="fade-right" data-i18n-html="work.title">SELECTED<br>PROJECTS</h2>
+            <div class="work-head-meta">
+                <p class="swipe-hint text-[10px] font-bold uppercase tracking-[0.25em] opacity-45">
+                    <span data-i18n="work.count">04 featured</span>
+                    <span class="swipe-hint-rule"></span>
+                    <span data-i18n="work.swipe">Swipe to browse</span>
+                </p>
+                <a href="projects.html" id="viewAllProjects" class="view-all-btn" data-i18n="work.viewAll">View all</a>
+            </div>
         </div>
         
         <div class="horizontal-scroll-container">
             <div class="horizontal-scroll-wrapper">
-                <!-- Project 1: T4T -->
                 <div class="horizontal-item h-[50vh] md:h-[60vh] relative group overflow-hidden rounded-[24px] md:rounded-[32px] border border-white/10 backdrop-blur-md bg-white/5 p-6 md:p-8 flex flex-col justify-end cursor-pointer">
                     <video class="absolute inset-0 w-full h-full object-cover z-[-1] opacity-40 group-hover:opacity-60 transition-opacity duration-700" src="T4TEA/T4TEA.webm" poster="T4TEA/T41.webp" muted loop playsinline preload="none"></video>
                     <div class="project-card-body z-10 translate-y-4 group-hover:translate-y-0 transition-all duration-500">
-                        <h3 class="text-2xl md:text-3xl font-bold mb-2">T4T STORE</h3>
-                        <p class="text-sm opacity-70 mb-4" dir="rtl">منصة متكاملة لبراند تي فور تي — سلة ذكية وتتبع مباشر للطلبات.</p>
-                        <span class="text-xs font-bold tracking-widest uppercase py-2 px-4 bg-white/10 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-500 project-card-cta">View Experience</span>
+                        <h3 class="font-bold mb-2">T4T STORE</h3>
+                        <p class="project-blurb opacity-70 mb-4" data-i18n="proj.t4t">A complete store for the T4T tea brand — smart cart and live order tracking.</p>
+                        <span class="text-xs font-bold tracking-widest uppercase py-2 px-4 bg-white/10 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-500 project-card-cta" data-i18n="cta.view">View Experience</span>
                     </div>
                 </div>
-                <!-- Project 2: Rebhny -->
-                <div class="horizontal-item h-[50vh] md:h-[60vh] relative group overflow-hidden rounded-[24px] md:rounded-[32px] border border-white/10 backdrop-blur-md bg-white/5 p-6 md:p-8 flex flex-col justify-end cursor-pointer">
-                    <img src="assets/imges/r1.png" alt="Rebhny Auction" class="absolute inset-0 w-full h-full object-cover z-[-1] opacity-40 group-hover:opacity-60 group-hover:scale-110 transition-all duration-700" loading="lazy" decoding="async">
-                    <div class="project-card-body z-10 translate-y-4 group-hover:translate-y-0 transition-all duration-500">
-                        <h3 class="text-2xl md:text-3xl font-bold mb-1">REBHNY</h3>
-                        <p class="text-sm opacity-70 mb-3" dir="rtl">منصة مزايدات حية مع Socket.io ولوحة تحكم احترافية.</p>
-                        <span class="text-xs font-bold tracking-widest uppercase py-2 px-4 bg-white/10 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-500 project-card-cta">Explore Live</span>
-                    </div>
-                </div>
-                <!-- Project 3: Fortno -->
-                <div class="horizontal-item h-[50vh] md:h-[60vh] relative group overflow-hidden rounded-[24px] md:rounded-[32px] border border-white/10 backdrop-blur-md bg-white/5 p-6 md:p-8 flex flex-col justify-end cursor-pointer">
-                    <img src="assets/imges/f1.png" alt="Fortno Car Care" class="absolute inset-0 w-full h-full object-cover z-[-1] opacity-40 group-hover:opacity-60 group-hover:scale-110 transition-all duration-700" loading="lazy" decoding="async">
-                    <div class="project-card-body z-10 translate-y-4 group-hover:translate-y-0 transition-all duration-500">
-                        <h3 class="text-2xl md:text-3xl font-bold mb-1">FORTNO</h3>
-                        <p class="text-sm opacity-70 mb-3" dir="rtl">واجهة فاخرة لعلامة فورتو للعناية بالسيارات.</p>
-                        <span class="text-xs font-bold tracking-widest uppercase py-2 px-4 bg-white/10 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-500 project-card-cta">View Design</span>
-                    </div>
-                </div>
-                <!-- Project 4: Al Hendal -->
-                <div class="horizontal-item h-[50vh] md:h-[60vh] relative group overflow-hidden rounded-[24px] md:rounded-[32px] border border-white/10 backdrop-blur-md bg-white/5 p-6 md:p-8 flex flex-col justify-end cursor-pointer">
-                    <img src="assets/imges/a1.png" alt="Al Hendal" class="absolute inset-0 w-full h-full object-cover z-[-1] opacity-40 group-hover:opacity-60 group-hover:scale-110 transition-all duration-700" loading="lazy" decoding="async">
-                    <div class="project-card-body z-10 translate-y-4 group-hover:translate-y-0 transition-all duration-500">
-                        <h3 class="text-2xl md:text-3xl font-bold mb-1">AL HENDAL</h3>
-                        <p class="text-sm opacity-70 mb-3" dir="rtl">موقع ثنائي اللغة لمجموعة الهندال مع GSAP و RTL/LTR.</p>
-                        <span class="text-xs font-bold tracking-widest uppercase py-2 px-4 bg-white/10 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-500 project-card-cta">Explore</span>
-                    </div>
-                </div>
-                <!-- Project 5: Bubble Hope -->
                 <div class="horizontal-item h-[50vh] md:h-[60vh] relative group overflow-hidden rounded-[24px] md:rounded-[32px] border border-white/10 backdrop-blur-md bg-white/5 p-6 md:p-8 flex flex-col justify-end cursor-pointer">
                     <video class="absolute inset-0 w-full h-full object-cover z-[-1] opacity-40 group-hover:opacity-60 transition-opacity duration-700" src="Bubble/Bubble.webm" poster="Bubble/BB1.webp" muted loop playsinline preload="none"></video>
                     <div class="project-card-body z-10 translate-y-4 group-hover:translate-y-0 transition-all duration-500">
-                        <h3 class="text-2xl md:text-3xl font-bold mb-1">BUBBLE HOPE</h3>
-                        <p class="text-sm opacity-70 mb-3" dir="rtl">منصة تسوق إلكترونية بواجهة عصرية وتجربة تصفح سلسة.</p>
-                        <span class="text-xs font-bold tracking-widest uppercase py-2 px-4 bg-white/10 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-500 project-card-cta">View Store</span>
+                        <h3 class="font-bold mb-1">BUBBLE HOPE</h3>
+                        <p class="project-blurb opacity-70 mb-3" data-i18n="proj.bubble">An e-commerce platform with a modern interface and smooth browsing.</p>
+                        <span class="text-xs font-bold tracking-widest uppercase py-2 px-4 bg-white/10 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-500 project-card-cta" data-i18n="cta.store">View Store</span>
                     </div>
                 </div>
-                <!-- Project 6: Moonlight Events -->
                 <div class="horizontal-item h-[50vh] md:h-[60vh] relative group overflow-hidden rounded-[24px] md:rounded-[32px] border border-white/10 backdrop-blur-md bg-white/5 p-6 md:p-8 flex flex-col justify-end cursor-pointer">
-                    <img src="assets/imges/moon1.png" alt="Moonlight Events" class="absolute inset-0 w-full h-full object-cover z-[-1] opacity-40 group-hover:opacity-60 group-hover:scale-110 transition-all duration-700" loading="lazy" decoding="async">
+                    <img src="assets/imges/a1.png" alt="Al Hendal" class="absolute inset-0 w-full h-full object-cover z-[-1] opacity-40 group-hover:opacity-60 group-hover:scale-110 transition-all duration-700" loading="lazy" decoding="async">
                     <div class="project-card-body z-10 translate-y-4 group-hover:translate-y-0 transition-all duration-500">
-                        <h3 class="text-2xl md:text-3xl font-bold mb-1">MOONLIGHT</h3>
-                        <p class="text-sm opacity-70 mb-3" dir="rtl">منصة سعودية لإدارة الفعاليات الكبرى بتصميم Dark Mode.</p>
-                        <span class="text-xs font-bold tracking-widest uppercase py-2 px-4 bg-white/10 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-500 project-card-cta">View Events</span>
+                        <h3 class="font-bold mb-1">AL HENDAL</h3>
+                        <p class="project-blurb opacity-70 mb-3" data-i18n="proj.hendal">Bilingual site for Al Hendal Group with GSAP and RTL/LTR.</p>
+                        <span class="text-xs font-bold tracking-widest uppercase py-2 px-4 bg-white/10 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-500 project-card-cta" data-i18n="cta.explore">Explore</span>
                     </div>
                 </div>
-                <!-- Project 7: Viganium AI -->
                 <div class="horizontal-item h-[50vh] md:h-[60vh] relative group overflow-hidden rounded-[24px] md:rounded-[32px] border border-white/10 backdrop-blur-md bg-white/5 p-6 md:p-8 flex flex-col justify-end cursor-pointer">
-                    <img src="assets/imges/vig1.png" alt="Viganium AI" class="absolute inset-0 w-full h-full object-cover z-[-1] opacity-40 group-hover:opacity-60 group-hover:scale-110 transition-all duration-700" loading="lazy" decoding="async">
+                    <img src="assets/imges/am1.jpg" alt="Alamana Building Materials" class="absolute inset-0 w-full h-full object-cover z-[-1] opacity-40 group-hover:opacity-60 group-hover:scale-110 transition-all duration-700" loading="lazy" decoding="async">
                     <div class="project-card-body z-10 translate-y-4 group-hover:translate-y-0 transition-all duration-500">
-                        <h3 class="text-2xl md:text-3xl font-bold mb-1">VIGANIUM AI</h3>
-                        <p class="text-sm opacity-70 mb-3" dir="rtl">حلول برمجية وذكاء اصطناعي بعناصر ثلاثية الأبعاد.</p>
-                        <span class="text-xs font-bold tracking-widest uppercase py-2 px-4 bg-white/10 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-500 project-card-cta">View AI</span>
-                    </div>
-                </div>
-                <!-- Project 8: Gulf Food Factory -->
-                <div class="horizontal-item h-[50vh] md:h-[60vh] relative group overflow-hidden rounded-[24px] md:rounded-[32px] border border-white/10 backdrop-blur-md bg-white/5 p-6 md:p-8 flex flex-col justify-end cursor-pointer">
-                    <img src="assets/imges/gf1.png" alt="Gulf Food Factory" class="absolute inset-0 w-full h-full object-cover z-[-1] opacity-40 group-hover:opacity-60 group-hover:scale-110 transition-all duration-700" loading="lazy" decoding="async">
-                    <div class="project-card-body z-10 translate-y-4 group-hover:translate-y-0 transition-all duration-500">
-                        <h3 class="text-2xl md:text-3xl font-bold mb-1">GULF FOOD</h3>
-                        <p class="text-sm opacity-70 mb-3" dir="rtl">واجهة رقمية لمصنع أغذية مع كتالوج وشهادات عالمية.</p>
-                        <span class="text-xs font-bold tracking-widest uppercase py-2 px-4 bg-white/10 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-500 project-card-cta">Explore</span>
+                        <h3 class="font-bold mb-1">ALAMANA</h3>
+                        <p class="project-blurb opacity-70 mb-3" data-i18n="proj.alamana">A building-materials store for Alamana — waterproofing, adhesives and an interactive catalog.</p>
+                        <span class="text-xs font-bold tracking-widest uppercase py-2 px-4 bg-white/10 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-500 project-card-cta" data-i18n="cta.store">View Store</span>
                     </div>
                 </div>
             </div>
@@ -256,16 +216,16 @@
 
     <!-- About Section -->
     <section id="about" class="py-16 md:py-24 px-6 md:px-[10%] md:min-h-screen flex flex-col justify-center">
-        <h2 class="text-4xl md:text-7xl font-extrabold mb-8 reveal-text" data-aos="fade-right">THE TRAJECTORY</h2>
-        <p class="text-lg md:text-2xl max-w-2xl md:max-w-4xl lg:max-w-5xl opacity-80 mb-6 reveal-text" data-aos="fade-up">I am an innovative <strong>Frontend Developer</strong> with hands-on experience in building, scaling, and shipping high-performance web interfaces. Based in Egypt, I turn complex designs into fast, accessible, and seamless user experiences.</p>
-        <p class="text-sm md:text-lg max-w-2xl md:max-w-4xl lg:max-w-5xl opacity-60 mb-8 md:mb-10 reveal-text" data-aos="fade-up" data-aos-delay="200">Expertise in <strong>Angular</strong>, <strong>TypeScript</strong>, and <strong>Tailwind CSS</strong>. Graduated from Business Information Systems (BIS) at Future Academy, I've spent the last 7 months delivering polished frontend solutions for diverse industries.</p>
+        <h2 class="section-title font-extrabold mb-6 reveal-text" data-aos="fade-right" data-i18n="about.title">THE TRAJECTORY</h2>
+        <p class="about-lead opacity-80 mb-5 reveal-text" data-aos="fade-up" data-i18n-html="about.p1">I am an innovative <strong>Frontend Developer</strong> with hands-on experience in building, scaling, and shipping high-performance web interfaces. Based in Egypt, I turn complex designs into fast, accessible, and seamless user experiences.</p>
+        <p class="about-copy opacity-60 mb-8 md:mb-10 reveal-text" data-aos="fade-up" data-aos-delay="200" data-i18n-html="about.p2">Expertise in <strong>Angular</strong>, <strong>TypeScript</strong>, and <strong>Tailwind CSS</strong>. Graduated from Business Information Systems (BIS) at Future Academy, I've spent the last 7 months delivering polished frontend solutions for diverse industries.</p>
 
         <div class="flex items-end justify-between gap-4 mb-4">
-            <h3 class="text-2xl md:text-3xl font-bold">Stack</h3>
-            <p class="md:hidden text-[9px] font-bold uppercase tracking-[0.18em] opacity-40 text-right leading-relaxed">Tap a badge<br>Tilt to shift</p>
+            <h3 class="about-stack-title font-bold" data-i18n="about.stack">Stack</h3>
+            <p class="md:hidden text-[11px] font-bold uppercase tracking-[0.18em] opacity-40 text-end leading-relaxed" data-i18n-html="about.hint">Tap a badge<br>Tilt to shift</p>
         </div>
         <div id="stackPlayground" class="stack-playground relative w-full h-[300px] md:h-[420px] rounded-[24px] md:rounded-[36px] border border-white/10 bg-[#111] overflow-hidden">
-            <button id="stackReset" type="button" class="absolute top-3 right-3 z-20 w-9 h-9 rounded-full bg-white/5 border border-white/15 text-white flex items-center justify-center hover:bg-white/10 transition-colors cursor-pointer" aria-label="Reset stack">
+            <button id="stackReset" type="button" class="absolute top-3 end-3 z-20 w-9 h-9 rounded-full bg-white/5 border border-white/15 text-white flex items-center justify-center hover:bg-white/10 transition-colors cursor-pointer" aria-label="Reset stack">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                 </svg>
@@ -291,45 +251,58 @@
     </section>
 
     <!-- Contact Section -->
-    <section id="contact" class="py-16 md:py-20 px-6 md:px-[10%] flex flex-col justify-center items-center text-center">
-        <div class="backdrop-blur-2xl bg-white/5 border border-white/10 p-6 md:p-10 rounded-[28px] md:rounded-[36px] max-w-3xl w-full" data-aos="zoom-in">
-            <h2 class="text-3xl md:text-5xl font-black mb-4 md:mb-5 reveal-text">LET'S CONNECT.</h2>
+    <section id="contact" class="contact-stage py-16 md:py-20 px-6 md:px-[10%] flex flex-col justify-center items-center text-center">
+        <div id="contactGlass" class="contact-glass max-w-3xl w-full">
+            <div class="contact-glass-shine" aria-hidden="true"></div>
+            <h2 class="contact-title font-black mb-4 md:mb-5 reveal-text" data-i18n="contact.title">LET'S CONNECT.</h2>
 
-            <form id="contactForm" class="text-left space-y-2.5 mb-4 md:mb-5" novalidate>
+            <form id="contactForm" class="text-start space-y-2.5 mb-6" novalidate>
                 <input type="hidden" name="_subject" value="New message from portfolio">
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-2.5">
-                    <input id="contactName" name="name" type="text" required placeholder="Name"
-                        class="contact-input w-full bg-white/5 border border-white/10 rounded-full px-5 py-2.5 text-sm outline-none focus:border-primary transition-colors placeholder:opacity-40">
-                    <input id="contactEmail" name="email" type="email" required placeholder="Email"
-                        class="contact-input w-full bg-white/5 border border-white/10 rounded-full px-5 py-2.5 text-sm outline-none focus:border-primary transition-colors placeholder:opacity-40">
+                    <input id="contactName" name="name" type="text" required placeholder="Name" data-i18n-placeholder="contact.name"
+                        class="contact-input w-full rounded-full px-5 py-3 outline-none placeholder:opacity-40">
+                    <input id="contactEmail" name="email" type="email" required placeholder="Email" data-i18n-placeholder="contact.email"
+                        class="contact-input w-full rounded-full px-5 py-3 outline-none placeholder:opacity-40">
                 </div>
-                <textarea id="contactMessage" name="message" rows="2" required placeholder="Your message..."
-                    class="contact-input w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-2.5 text-sm outline-none focus:border-primary transition-colors placeholder:opacity-40 resize-none"></textarea>
-                <div class="flex flex-col sm:flex-row sm:items-center gap-2">
-                    <button id="contactSubmit" type="submit" class="btn-primary bg-white text-dark px-7 py-2.5 rounded-full font-bold hover:bg-primary hover:text-white border border-transparent transition-all text-sm">
+                <textarea id="contactMessage" name="message" rows="3" required placeholder="Your message..." data-i18n-placeholder="contact.message"
+                    class="contact-input w-full rounded-2xl px-5 py-3 outline-none placeholder:opacity-40 resize-none"></textarea>
+                <div class="flex flex-col items-center gap-2 pt-1">
+                    <button id="contactSubmit" type="submit" class="btn-primary bg-white text-dark px-8 py-3 rounded-full font-bold hover:bg-primary hover:text-white border border-transparent transition-all" data-i18n="contact.send">
                         Send on WhatsApp
                     </button>
-                    <p id="contactStatus" class="text-xs opacity-80 text-center sm:text-left" aria-live="polite"></p>
+                    <p id="contactStatus" class="text-xs opacity-80 text-center" aria-live="polite"></p>
                 </div>
             </form>
 
-            <div class="flex flex-col md:flex-row items-center justify-center gap-2 md:gap-6 mb-4 overflow-hidden">
-                <a href="mailto:booda2201@gmail.com" class="text-sm md:text-base font-bold hover:text-primary transition-all break-all">booda2201@gmail.com</a>
-                <span class="hidden md:block opacity-20">|</span>
-                <a href="tel:+201127273643" class="text-sm md:text-base font-bold hover:text-primary transition-all">+20 112 727 3643</a>
-            </div>
-            <div class="flex flex-wrap justify-center gap-2 md:gap-4">
-                <a href="https://github.com/booda2201-tech" target="_blank" class="skill-tag px-5 py-2 md:px-6 md:py-2.5 rounded-full border border-white/10 bg-white/5 text-xs md:text-sm font-bold hover:bg-primary transition-all">GitHub</a>
-                <a href="https://wa.me/201127273643" target="_blank" class="skill-tag px-5 py-2 md:px-6 md:py-2.5 rounded-full border border-white/10 bg-white/5 text-xs md:text-sm font-bold hover:bg-secondary transition-all">WhatsApp</a>
-                <a href="https://www.linkedin.com/in/abdelrhman-khaled-b20800428/" target="_blank" rel="noopener noreferrer" class="skill-tag px-5 py-2 md:px-6 md:py-2.5 rounded-full border border-white/10 bg-white/5 text-xs md:text-sm font-bold hover:bg-accent transition-all">LinkedIn</a>
+            <div class="social-icons">
+                <a href="mailto:booda2201@gmail.com" class="social-icon is-mail" aria-label="Email">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#EA4335" d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4-8 5-8-5V6l8 5 8-5v2z"/></svg>
+                    <span class="social-icon-text">Email</span>
+                </a>
+                <a href="tel:+201127273643" class="social-icon is-phone" aria-label="Phone">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#34B7F1" d="M6.62 10.79a15.05 15.05 0 006.59 6.59l2.2-2.2a1 1 0 011.01-.24c1.12.37 2.33.57 3.58.57a1 1 0 011 1V20a1 1 0 01-1 1C10.07 21 3 13.93 3 5a1 1 0 011-1h3.5a1 1 0 011 1c0 1.25.2 2.46.57 3.58a1 1 0 01-.25 1.02l-2.2 2.19z"/></svg>
+                    <span class="social-icon-text">Call</span>
+                </a>
+                <a href="https://github.com/booda2201-tech" target="_blank" rel="noopener noreferrer" class="social-icon is-github" aria-label="GitHub">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#ffffff" d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.17 6.839 9.49.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.603-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.463-1.11-1.463-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0112 6.836c.85.004 1.705.114 2.504.336 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.578.688.48C19.138 20.167 22 16.418 22 12c0-5.523-4.477-10-10-10z"/></svg>
+                    <span class="social-icon-text">GitHub</span>
+                </a>
+                <a href="https://wa.me/201127273643" target="_blank" rel="noopener noreferrer" class="social-icon is-whatsapp" aria-label="WhatsApp">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#25D366" d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.86 9.86 0 004.79 1.22h.01c5.46 0 9.91-4.45 9.91-9.91C21.96 6.45 17.5 2 12.04 2zm5.72 14.08c-.24.68-1.4 1.26-1.94 1.34-.5.07-1.13.1-1.82-.11-.42-.13-.96-.31-1.66-.61-2.92-1.26-4.82-4.2-4.97-4.39-.14-.2-1.18-1.57-1.18-3 0-1.42.75-2.12 1.01-2.41.27-.29.58-.36.78-.36h.56c.18 0 .42-.07.66.5.24.58.82 2 .89 2.15.07.14.12.31.02.5-.1.2-.15.31-.3.48-.14.16-.3.37-.43.5-.14.13-.29.27-.12.53.16.26.73 1.2 1.56 1.95 1.08.96 1.98 1.26 2.26 1.4.27.14.43.12.59-.07.16-.2.68-.79.86-1.06.18-.27.36-.22.6-.13.24.09 1.54.73 1.8.86.27.13.44.2.51.31.07.11.07.64-.17 1.32z"/></svg>
+                    <span class="social-icon-text">WhatsApp</span>
+                </a>
+                <a href="https://www.linkedin.com/in/abdelrhman-khaled-b20800428/" target="_blank" rel="noopener noreferrer" class="social-icon is-linkedin" aria-label="LinkedIn">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#0A66C2" d="M20.45 20.45h-3.55v-5.57c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 110-4.12 2.06 2.06 0 010 4.12zM7.12 20.45H3.56V9h3.56v11.45z"/></svg>
+                    <span class="social-icon-text">LinkedIn</span>
+                </a>
             </div>
         </div>
     </section>
 
     <!-- Project Detail Overlay -->
     <div id="projectDetail" data-lenis-prevent class="fixed inset-0 z-[30000] bg-dark translate-y-full transition-transform duration-700 ease-[cubic-bezier(0.85,0,0.15,1)] flex flex-col overflow-y-auto overscroll-contain">
-        <button id="closeDetail" class="fixed top-4 right-4 md:top-8 md:right-8 z-[30001] w-10 h-10 md:w-12 md:h-12 rounded-full bg-white text-dark flex items-center justify-center hover:scale-110 transition-transform cursor-pointer shadow-xl" aria-label="Close">
+        <button id="closeDetail" class="fixed top-4 end-4 md:top-8 md:end-8 z-[30001] w-10 h-10 md:w-12 md:h-12 rounded-full bg-white text-dark flex items-center justify-center hover:scale-110 transition-transform cursor-pointer shadow-xl" aria-label="Close">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 md:h-6 md:w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
             </svg>
@@ -350,7 +323,7 @@
                 <button id="detailNext" type="button" class="absolute right-3 md:right-5 top-1/2 -translate-y-1/2 w-10 h-10 md:w-12 md:h-12 rounded-full bg-black/70 border border-white/20 text-white flex items-center justify-center hover:bg-primary hover:border-primary transition-all cursor-pointer" aria-label="Next image">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
                 </button>
-                <div id="detailCounter" class="absolute bottom-3 right-3 md:bottom-4 md:right-4 px-3 py-1 rounded-full bg-black/70 border border-white/10 text-[10px] md:text-xs font-mono tracking-widest">1 / 1</div>
+                <div id="detailCounter" class="absolute bottom-3 end-3 md:bottom-4 md:end-4 px-3 py-1 rounded-full bg-black/70 border border-white/10 text-[10px] md:text-xs font-mono tracking-widest">1 / 1</div>
             </div>
 
             <div id="detailThumbs" class="flex gap-2 md:gap-3 overflow-x-auto pb-2 mb-10 md:mb-14 scrollbar-hide"></div>
@@ -358,28 +331,28 @@
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-14">
                 <div class="order-2 md:order-1 md:col-span-2 space-y-10 md:space-y-12">
                     <div class="detail-reveal">
-                        <h3 class="text-[10px] uppercase tracking-widest opacity-40 mb-4">Case Study</h3>
-                        <p id="detailDesc" class="text-base md:text-xl opacity-80 leading-relaxed" dir="rtl">
+                        <h3 class="text-[10px] uppercase tracking-widest opacity-40 mb-4" data-i18n="detail.case">Case Study</h3>
+                        <p id="detailDesc" class="text-base md:text-xl opacity-80 leading-relaxed">
                             Detailed project description goes here...
                         </p>
                     </div>
                     <div class="detail-reveal">
-                        <h3 class="text-[10px] uppercase tracking-widest opacity-40 mb-5">Key Features · المميزات</h3>
-                        <ul id="detailFeatures" class="detail-points" dir="rtl"></ul>
+                        <h3 class="text-[10px] uppercase tracking-widest opacity-40 mb-5" data-i18n="detail.features">Key Features</h3>
+                        <ul id="detailFeatures" class="detail-points"></ul>
                     </div>
                     <div class="detail-reveal">
-                        <h3 class="text-[10px] uppercase tracking-widest opacity-40 mb-5">New Ideas · الأفكار الجديدة</h3>
-                        <ul id="detailIdeas" class="detail-points" dir="rtl"></ul>
+                        <h3 class="text-[10px] uppercase tracking-widest opacity-40 mb-5" data-i18n="detail.ideas">New Ideas</h3>
+                        <ul id="detailIdeas" class="detail-points"></ul>
                     </div>
                 </div>
                 <div class="order-1 md:order-2 space-y-8">
                     <div class="detail-reveal">
-                        <h3 class="text-[10px] uppercase tracking-widest opacity-40 mb-4">Skills Used · المهارات</h3>
+                        <h3 class="text-[10px] uppercase tracking-widest opacity-40 mb-4" data-i18n="detail.skills">Skills Used</h3>
                         <div id="detailStack" class="flex flex-wrap gap-2"></div>
                     </div>
                     <div id="detailActions" class="detail-reveal">
-                        <h3 class="text-[10px] uppercase tracking-widest opacity-40 mb-4">Actions</h3>
-                        <a id="detailLink" href="#" target="_blank" rel="noopener noreferrer" class="btn-primary bg-white text-dark px-6 py-3 md:px-8 rounded-full font-bold inline-block hover:bg-primary hover:text-white transition-all w-full text-center">Live Site</a>
+                        <h3 class="text-[10px] uppercase tracking-widest opacity-40 mb-4" data-i18n="detail.actions">Actions</h3>
+                        <a id="detailLink" href="#" target="_blank" rel="noopener noreferrer" class="btn-primary bg-white text-dark px-6 py-3 md:px-8 rounded-full font-bold inline-block hover:bg-primary hover:text-white transition-all w-full text-center" data-i18n="detail.live">Live Site</a>
                     </div>
                 </div>
             </div>
@@ -387,11 +360,11 @@
     </div>
 
     <footer class="py-12 px-6 border-t border-white/10 text-center opacity-50 text-xs md:text-sm">
-        <p>&copy; 2026 Abdelrhman Khaled. Built with passion & modern tech.</p>
+        <p data-i18n="footer.copy">&copy; 2026 Abdelrhman Khaled. Built with passion & modern tech.</p>
     </footer>
 
     <!-- Back to Top -->
-    <button id="backToTop" class="hidden md:flex fixed bottom-5 right-5 md:bottom-8 md:right-8 w-12 h-12 rounded-full bg-white text-dark items-center justify-center shadow-2xl opacity-0 translate-y-10 transition-all duration-500 z-[9998] hover:scale-110 active:scale-95 group cursor-pointer">
+    <button id="backToTop" class="hidden md:flex fixed bottom-5 end-5 md:bottom-8 md:end-8 w-12 h-12 rounded-full bg-white text-dark items-center justify-center shadow-2xl opacity-0 translate-y-10 transition-all duration-500 z-[9998] hover:scale-110 active:scale-95 group cursor-pointer">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 group-hover:-translate-y-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18" />
         </svg>
@@ -410,6 +383,7 @@
             document.write('<script src="https://unpkg.com/@studio-freight/lenis@1.0.33/dist/lenis.min.js"><\/script>');
         }
     </script>
-    <script src="main.js?v=7"></script>
+    <script src="i18n.js?v=7"></script>
+    <script src="main.js?v=18"></script>
 </body>
 </html>

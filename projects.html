@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#050505">
+    <title>All Projects | Abdelrhman Khaled</title>
+    <meta name="description" content="The full project archive of Abdelrhman Khaled — Angular, TypeScript and Tailwind CSS work across e-commerce, realtime and corporate platforms.">
+    <script>
+        (function () {
+            var lang = 'en';
+            try { lang = localStorage.getItem('lang') === 'ar' ? 'ar' : 'en'; } catch (e) {}
+            document.documentElement.lang = lang;
+            document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+            window.__IS_MOBILE__ = window.matchMedia('(max-width: 767px)').matches;
+            var view = 'grid';
+            try { view = localStorage.getItem('archiveView') === 'index' ? 'index' : 'grid'; } catch (e) {}
+            document.documentElement.dataset.view = view;
+        })();
+    </script>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#8b5cf6',
+                        secondary: '#06b6d4',
+                        accent: '#ec4899',
+                        dark: '#050505',
+                    },
+                    fontFamily: {
+                        sans: ['Outfit', 'Tajawal', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <link rel="stylesheet" href="index.css?v=22">
+    <link rel="stylesheet" href="projects.css?v=7">
+</head>
+<body class="bg-dark text-white font-sans overflow-x-hidden cursor-none">
+
+    <div id="scrollProgress" class="fixed top-0 start-0 h-1 bg-gradient-to-r from-primary via-secondary to-accent z-[10001] w-0 transition-all duration-100"></div>
+    <div class="cursor flex items-center justify-center text-[8px] font-bold uppercase tracking-widest text-dark overflow-hidden transition-all duration-300">
+        <span class="cursor-text opacity-0">View</span>
+    </div>
+    <div class="cursor-follower"></div>
+    <div class="noise-overlay desktop-fx"></div>
+    <div class="scanlines desktop-fx"></div>
+    <div class="vignette"></div>
+    <div id="lightLeak" class="desktop-fx fixed inset-0 z-[9996] pointer-events-none opacity-20 bg-gradient-to-tr from-primary/20 via-transparent to-accent/20 mix-blend-screen"></div>
+
+    <div class="bg-mesh">
+        <div class="mesh-circle c1 opacity-40"></div>
+        <div class="mesh-circle c2 opacity-40"></div>
+        <div class="mesh-circle c3 opacity-40"></div>
+    </div>
+    <div class="float-field" aria-hidden="true">
+        <span class="float-shape is-ring s1"></span>
+        <span class="float-shape is-dot s2"></span>
+        <span class="float-shape is-ring s3"></span>
+        <span class="float-shape is-diamond s5"></span>
+    </div>
+
+    <nav id="archiveNav" class="archive-nav">
+        <a href="index.html" id="logo" class="text-2xl font-black italic tracking-tighter justify-self-start">AK.</a>
+        <div class="archive-nav-links">
+            <a href="index.html" data-i18n="nav.home">Home</a>
+            <a href="index.html#work" data-i18n="nav.work">Work</a>
+            <a href="index.html#about" data-i18n="nav.about">About</a>
+            <a href="index.html#contact" data-i18n="nav.contact">Contact</a>
+        </div>
+        <div class="archive-nav-actions flex items-center gap-2 md:gap-3 justify-self-end">
+            <div id="langToggle" class="lang-toggle" role="group" aria-label="Language">
+                <button type="button" data-lang="en" class="is-active">EN</button>
+                <button type="button" data-lang="ar">عربي</button>
+            </div>
+            <a href="index.html" class="archive-back" data-i18n="all.back">Back home</a>
+        </div>
+    </nav>
+
+    <!-- Mobile Bottom Navigation -->
+    <nav id="mobileNav" class="md:hidden" aria-label="Section navigation">
+        <div class="mnav-shell">
+            <span class="mnav-pill" aria-hidden="true"></span>
+            <a class="mnav-item" href="index.html" data-section="home">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10.6 12 3.4l9 7.2"/><path d="M5.4 9.4V20h13.2V9.4"/></svg>
+                <span data-i18n="nav.home">Home</span>
+            </a>
+            <a class="mnav-item is-active" href="projects.html" data-section="work">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.2" y="4" width="7.2" height="7.2" rx="1.6"/><rect x="13.6" y="4" width="7.2" height="7.2" rx="1.6"/><rect x="3.2" y="13.6" width="7.2" height="6.4" rx="1.6"/><rect x="13.6" y="13.6" width="7.2" height="6.4" rx="1.6"/></svg>
+                <span data-i18n="nav.work">Work</span>
+            </a>
+            <a class="mnav-item" href="index.html#about" data-section="about">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8.2" r="3.6"/><path d="M4.6 20c0-3.7 3.3-6.2 7.4-6.2s7.4 2.5 7.4 6.2"/></svg>
+                <span data-i18n="nav.about">About</span>
+            </a>
+            <a class="mnav-item" href="index.html#contact" data-section="contact">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5.6" width="18" height="12.8" rx="2.6"/><path d="m3.9 7.4 8.1 5.8 8.1-5.8"/></svg>
+                <span data-i18n="nav.contact">Contact</span>
+            </a>
+        </div>
+    </nav>
+
+    <header class="archive-head">
+        <span id="archiveGhost" class="archive-ghost" aria-hidden="true">ARCHIVE 2026</span>
+        <p class="archive-eyebrow"><span class="archive-eyebrow-rule" aria-hidden="true"></span><span data-i18n="all.eyebrow">Portfolio archive</span></p>
+        <div class="archive-title-mask">
+            <h1 class="archive-title" data-i18n="all.title">ALL PROJECTS</h1>
+        </div>
+        <p class="archive-lead" data-i18n="all.lead">Every shipped build in one place — e-commerce platforms, realtime dashboards and corporate identities, all crafted with Angular, TypeScript and motion.</p>
+
+        <div class="archive-stats">
+            <div class="archive-stat">
+                <strong id="archiveCount">08</strong>
+                <span data-i18n="all.projects">Projects</span>
+            </div>
+            <div class="archive-stat">
+                <strong id="archiveLive">05</strong>
+                <span data-i18n="all.live">Live</span>
+            </div>
+            <div class="archive-stat">
+                <strong>07</strong>
+                <span data-i18n="all.months">Months</span>
+            </div>
+        </div>
+    </header>
+
+    <div class="archive-filterbar">
+        <p class="archive-filter-label" data-i18n="all.filterLabel">Browse by</p>
+        <div id="archiveFilters" class="archive-filters" role="group" aria-label="Filter projects"></div>
+        <div id="viewToggle" class="view-toggle" role="group" aria-label="Change layout">
+            <button type="button" data-view="grid" class="is-active" aria-pressed="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><rect x="3.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="13.5" width="7" height="7" rx="1.5"/></svg>
+                <span data-i18n="all.viewGrid">Grid</span>
+            </button>
+            <button type="button" data-view="index" aria-pressed="false">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 6.5h16"/><path d="M4 12h16"/><path d="M4 17.5h16"/></svg>
+                <span data-i18n="all.viewIndex">Index</span>
+            </button>
+        </div>
+    </div>
+
+    <main>
+        <div id="projectsGrid" class="projects-grid"></div>
+        <div id="projectsIndex" class="projects-index"></div>
+        <p id="archiveEmpty" class="archive-empty" hidden data-i18n="all.empty">Nothing in this category yet.</p>
+    </main>
+
+    <!-- Follows the pointer over the index rows so the list still shows the work. -->
+    <div id="hoverPreview" class="hover-preview" aria-hidden="true">
+        <img alt="" decoding="async">
+    </div>
+
+    <!-- Scrolling Marquee -->
+    <div class="marquee marquee--slow marquee--alt select-none" aria-hidden="true">
+        <svg class="marquee-mark" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true">
+            <path d="M22 16h14a10 10 0 010 20H20a8 8 0 110-16h18" stroke-linecap="round"/>
+        </svg>
+        <div class="marquee-track">
+            <div class="marquee-content">
+                <span data-i18n="mq2.1">Angular &amp; TypeScript</span>
+                <span class="marquee-sep">▪</span>
+                <span data-i18n="mq2.2">Pixel-Perfect UI</span>
+                <span class="marquee-sep">▪</span>
+                <span data-i18n="mq2.3">Motion &amp; Interaction</span>
+                <span class="marquee-sep">▪</span>
+                <span data-i18n="mq2.5">Design to Code</span>
+                <span class="marquee-sep">▪</span>
+            </div>
+            <div class="marquee-content">
+                <span data-i18n="mq2.1">Angular &amp; TypeScript</span>
+                <span class="marquee-sep">▪</span>
+                <span data-i18n="mq2.2">Pixel-Perfect UI</span>
+                <span class="marquee-sep">▪</span>
+                <span data-i18n="mq2.3">Motion &amp; Interaction</span>
+                <span class="marquee-sep">▪</span>
+                <span data-i18n="mq2.5">Design to Code</span>
+                <span class="marquee-sep">▪</span>
+            </div>
+        </div>
+    </div>
+
+    <section class="archive-cta">
+        <div class="archive-cta-card">
+            <div class="archive-cta-shine" aria-hidden="true"></div>
+            <h2 class="archive-cta-title" data-i18n="all.ctaTitle">Have a build in mind?</h2>
+            <p class="archive-cta-text" data-i18n="all.ctaText">Tell me about the product and I'll turn it into a fast, polished interface.</p>
+            <a href="index.html#contact" class="archive-cta-btn" data-i18n="all.ctaBtn">Start a project</a>
+        </div>
+    </section>
+
+    <footer class="archive-footer">
+        <p data-i18n="footer.copy">© 2026 Abdelrhman Khaled. Built with passion &amp; modern tech.</p>
+    </footer>
+
+    <button id="backToTop" class="hidden md:flex fixed bottom-5 end-5 md:bottom-8 md:end-8 w-12 h-12 rounded-full bg-white text-dark items-center justify-center shadow-2xl opacity-0 translate-y-10 transition-all duration-500 z-[9998] hover:scale-110 active:scale-95 group cursor-pointer" aria-label="Back to top">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 group-hover:-translate-y-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18" />
+        </svg>
+    </button>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/Flip.min.js"></script>
+    <script src="i18n.js?v=7"></script>
+    <script src="projects.js?v=9"></script>
+</body>
+</html>

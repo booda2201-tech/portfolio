@@ -1,15 +1,423 @@
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Tajawal:wght@400;500;700;800&display=swap');
 
-/* Infinite marquee — left to right */
+:root {
+    --bg: #050505;
+    --fg: #ffffff;
+    --primary: #8b5cf6;
+    --secondary: #06b6d4;
+    --accent: #ec4899;
+    --fs-body: 1.0625rem;
+    --lh-body: 1.7;
+    --fs-h1: clamp(2.05rem, 7.2vw, 4.5rem);
+    --fs-h2: clamp(1.7rem, 3.6vw, 3.1rem);
+    --fs-h3: clamp(1.15rem, 1.8vw, 1.55rem);
+}
+
+@media (min-width: 768px) {
+    :root {
+        --fs-body: 1.125rem;
+        --fs-h1: clamp(3.1rem, 5.4vw, 4.6rem);
+    }
+}
+
+html {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+body {
+    font-size: var(--fs-body);
+    line-height: var(--lh-body);
+}
+
+#logo {
+    font-family: 'Outfit', sans-serif;
+    direction: ltr;
+    unicode-bidi: isolate;
+}
+
+.lang-toggle button[data-lang="ar"] {
+    font-family: 'Tajawal', sans-serif;
+    letter-spacing: 0;
+    font-weight: 700;
+}
+
+.hero-title {
+    font-size: var(--fs-h1);
+    line-height: 1.08;
+    background: linear-gradient(90deg, #fff, var(--primary), var(--secondary), #fff);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: prismatic 5s linear infinite;
+    filter: drop-shadow(0 0 30px rgba(139, 92, 246, 0.2));
+    letter-spacing: -0.06em;
+}
+
+.hero-bio {
+    font-size: clamp(0.98rem, 1.35vw, 1.2rem);
+    line-height: 1.75;
+    max-width: 38rem;
+}
+
+.section-title {
+    font-size: var(--fs-h2);
+    line-height: 1.15;
+    letter-spacing: -0.04em;
+    text-transform: uppercase;
+}
+
+.about-lead,
+.about-copy {
+    font-size: clamp(0.98rem, 1.3vw, 1.18rem);
+    line-height: 1.75;
+    max-width: 42rem;
+}
+
+.about-stack-title {
+    font-size: var(--fs-h3);
+}
+
+.contact-title {
+    font-size: var(--fs-h2);
+}
+
+.horizontal-item h3 {
+    font-size: var(--fs-h3);
+    line-height: 1.2;
+}
+
+.project-blurb {
+    font-size: 0.95rem;
+    line-height: 1.7;
+}
+
+.lang-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+    padding: 3px;
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.06);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    mix-blend-mode: normal;
+}
+
+.lang-toggle button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 2.6rem;
+    height: 1.7rem;
+    padding: 0 0.6rem;
+    /* Both labels sit on the same optical centre line, which the default
+       inline layout breaks because Tajawal and Outfit have different metrics. */
+    line-height: 1;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    background: transparent;
+    color: rgba(255, 255, 255, 0.6);
+    border: 0;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: color 0.25s ease, background-color 0.25s ease;
+}
+
+.lang-toggle button:hover {
+    color: #fff;
+}
+
+.lang-toggle button.is-active {
+    background: #fff;
+    color: #050505;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
+}
+
+.lang-toggle button:focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+}
+
+.lang-toggle button[data-lang="ar"] {
+    font-size: 11px;
+}
+
+/* Shares the language pill's exact outer height so the mobile nav reads as
+   one row of equal chips. */
+.nav-cv {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 2.1rem;
+    padding: 0 0.9rem;
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.06);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    font-size: 10px;
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #fff;
+    transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+.nav-cv:hover,
+.nav-cv:active {
+    background: #fff;
+    color: #050505;
+}
+
+@media (max-width: 767px) {
+    .lang-toggle button {
+        min-width: 2.35rem;
+        height: 1.6rem;
+        padding: 0 0.5rem;
+        font-size: 9.5px;
+    }
+
+    .lang-toggle button[data-lang="ar"] {
+        font-size: 10.5px;
+    }
+}
+
+.work-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1rem 1.5rem;
+}
+
+.work-head-meta {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.75rem;
+}
+
+html[dir="rtl"] .work-head-meta {
+    align-items: flex-start;
+}
+
+.view-all-btn {
+    display: inline-block;
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    background: rgba(255, 255, 255, 0.06);
+    color: #fff;
+    border-radius: 999px;
+    padding: 0.55rem 1.15rem;
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    cursor: pointer;
+    touch-action: manipulation;
+    transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.view-all-btn:hover {
+    background: #fff;
+    color: #050505;
+    border-color: #fff;
+}
+
+/* The section owns the perspective so the card can be tilted with plain
+   rotateX/rotateY values that never fight the perspective function. */
+.contact-stage {
+    perspective: 1100px;
+}
+
+.contact-glass {
+    position: relative;
+    overflow: hidden;
+    padding: 1.5rem 1.35rem 1.6rem;
+    border-radius: 28px;
+    background: linear-gradient(155deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.035) 45%, rgba(139, 92, 246, 0.08));
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    backdrop-filter: blur(22px) saturate(160%);
+    -webkit-backdrop-filter: blur(22px) saturate(160%);
+    box-shadow:
+        0 28px 70px rgba(0, 0, 0, 0.5),
+        0 8px 24px rgba(139, 92, 246, 0.12),
+        inset 0 1px 0 rgba(255, 255, 255, 0.28),
+        inset 0 -1px 0 rgba(255, 255, 255, 0.04);
+    transform: rotateX(6deg);
+    transform-style: preserve-3d;
+    transition: transform 0.35s cubic-bezier(0.22, 0.8, 0.2, 1);
+    will-change: transform;
+}
+
+.contact-glass-shine {
+    pointer-events: none;
+    position: absolute;
+    inset: -40% -20% auto;
+    height: 70%;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.22), transparent 70%);
+    transform: rotate(-8deg);
+    opacity: 0.55;
+}
+
+.contact-glass .contact-title,
+.contact-glass form,
+.contact-glass .social-icons {
+    position: relative;
+    z-index: 1;
+}
+
+.social-icons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    padding-top: 0.9rem;
+}
+
+.social-icon {
+    position: relative;
+    height: 46px;
+    min-width: 46px;
+    padding: 0 11px;
+    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    transition: transform 0.28s cubic-bezier(0.22, 0.8, 0.2, 1), background 0.28s ease,
+        border-radius 0.28s ease, border-color 0.28s ease,
+        padding 0.32s cubic-bezier(0.22, 0.8, 0.2, 1);
+}
+
+.social-icon svg {
+    width: 22px;
+    height: 22px;
+    flex: none;
+}
+
+/* Animated to the exact measured label width (--label-w, set in JS). Using
+   max-width here spends most of the timing on invisible space, which makes the
+   collapse look like it hangs before moving. */
+.social-icon-text {
+    width: 0;
+    opacity: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    transition: width 0.32s cubic-bezier(0.22, 0.8, 0.2, 1),
+        margin-inline-start 0.32s cubic-bezier(0.22, 0.8, 0.2, 1),
+        opacity 0.2s ease;
+}
+
+.social-icon:hover,
+.social-icon:focus-visible {
+    transform: translateY(-4px);
+    border-radius: 14px;
+    border-color: rgba(255, 255, 255, 0.32);
+    padding: 0 16px;
+    z-index: 2;
+}
+
+.social-icon:hover .social-icon-text,
+.social-icon:focus-visible .social-icon-text {
+    width: var(--label-w, 4.5rem);
+    margin-inline-start: 0.5rem;
+    opacity: 1;
+}
+
+/* A tap leaves :hover stuck on touch devices, which kept a pill expanded and
+   pushed the row onto a second line, so the pill stays a circle there. */
+@media (hover: none) {
+    .social-icon:hover,
+    .social-icon:focus-visible {
+        transform: none;
+        border-radius: 999px;
+        padding: 0 11px;
+    }
+
+    .social-icon:hover .social-icon-text,
+    .social-icon:focus-visible .social-icon-text {
+        width: 0;
+        margin-inline-start: 0;
+        opacity: 0;
+    }
+}
+
+.social-icon.is-github:hover { background: #181717; }
+.social-icon.is-whatsapp:hover { background: rgba(37, 211, 102, 0.18); }
+.social-icon.is-linkedin:hover { background: rgba(10, 102, 194, 0.2); }
+.social-icon.is-mail:hover { background: rgba(234, 67, 53, 0.18); }
+.social-icon.is-phone:hover { background: rgba(52, 183, 241, 0.18); }
+
+/* Infinite marquee — glass strip */
 .marquee {
+    position: relative;
     width: 100%;
+    overflow: hidden;
+    padding: 1.65rem 0;
+    background: linear-gradient(
+        180deg,
+        rgba(255, 255, 255, 0.08),
+        rgba(139, 92, 246, 0.07) 48%,
+        rgba(6, 182, 212, 0.04)
+    );
+    border-top: 1px solid rgba(255, 255, 255, 0.18);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.28);
+    backdrop-filter: blur(18px) saturate(150%);
+    -webkit-backdrop-filter: blur(18px) saturate(150%);
+}
+
+.marquee-mark {
+    pointer-events: none;
+    position: absolute;
+    top: 50%;
+    right: 7%;
+    width: min(28vw, 220px);
+    height: min(28vw, 220px);
+    transform: translateY(-50%) rotate(-28deg);
+    color: #fff;
+    opacity: 0.08;
+    z-index: 0;
+}
+
+.marquee--alt .marquee-mark {
+    right: auto;
+    left: 8%;
+    transform: translateY(-50%) rotate(22deg);
 }
 
 .marquee-track {
+    position: relative;
+    z-index: 1;
     display: flex;
     width: max-content;
     animation: marquee-ltr 32s linear infinite;
     will-change: transform;
+}
+
+.marquee--slow .marquee-track {
+    animation-duration: 42s;
+}
+
+.marquee--reverse .marquee-track {
+    animation-name: marquee-rtl;
+    animation-duration: 38s;
+}
+
+.marquee-track {
+    direction: ltr;
 }
 
 .marquee-content {
@@ -17,21 +425,30 @@
     align-items: center;
     flex-shrink: 0;
     gap: 2rem;
-    padding-right: 2rem;
+    padding-inline-end: 2rem;
     white-space: nowrap;
 }
 
 .marquee-content span {
-    font-size: 2.25rem;
+    font-size: 1.55rem;
     font-weight: 900;
     letter-spacing: 0.02em;
     text-transform: uppercase;
-    opacity: 0.2;
+    opacity: 0.28;
+}
+
+.marquee-content .marquee-sep {
+    font-size: 0.55em;
+    opacity: 0.35;
 }
 
 @media (min-width: 768px) {
+    .marquee {
+        padding: 2.4rem 0;
+    }
+
     .marquee-content span {
-        font-size: 3.75rem;
+        font-size: 2.35rem;
     }
 }
 
@@ -40,19 +457,16 @@
     to { transform: translateX(0); }
 }
 
+@keyframes marquee-rtl {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+}
+
 @media (prefers-reduced-motion: reduce) {
     .marquee-track {
         animation: none;
         transform: translateX(0);
     }
-}
-
-:root {
-    --bg: #050505;
-    --fg: #ffffff;
-    --primary: #8b5cf6;
-    --secondary: #06b6d4;
-    --accent: #ec4899;
 }
 
 /* --- Premium Overlays --- */
@@ -199,17 +613,6 @@
     }
 }
 
-.hero-title {
-    background: linear-gradient(90deg, #fff, var(--primary), var(--secondary), #fff);
-    background-size: 200% auto;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    animation: prismatic 5s linear infinite;
-    filter: drop-shadow(0 0 30px rgba(139, 92, 246, 0.2));
-    letter-spacing: -0.08em;
-}
-
 @keyframes prismatic {
     to { background-position: 200% center; }
 }
@@ -288,14 +691,13 @@
 .horizontal-scroll-wrapper {
     display: flex;
     width: fit-content;
-    padding-left: 9vw;
-    padding-right: 9vw;
+    padding-inline: 9vw;
 }
 
 .horizontal-item {
     flex-shrink: 0;
     width: 82vw;
-    margin-right: 4vw;
+    margin-inline-end: 4vw;
     scroll-snap-align: center;
 }
 
@@ -312,13 +714,12 @@
     }
 
     .horizontal-scroll-wrapper {
-        padding-left: 10vw;
-        padding-right: 10vw;
+        padding-inline: 10vw;
     }
 
     .horizontal-item {
         width: 45vw;
-        margin-right: 5vw;
+        margin-inline-end: 5vw;
         scroll-snap-align: none;
     }
 
@@ -373,13 +774,6 @@
 
 .reveal-text {
     opacity: 0;
-}
-
-.section-title {
-    font-size: clamp(3rem, 10vw, 8rem);
-    line-height: 0.9;
-    letter-spacing: -0.05em;
-    text-transform: uppercase;
 }
 
 /* --- Cinematic Video Feel --- */
@@ -451,16 +845,8 @@ body::-webkit-scrollbar,
     width: 0;
 }
 
-#fsMenu {
-    pointer-events: none;
-}
-
-#fsMenu:not(.translate-x-full) {
-    pointer-events: auto;
-}
-
 #projectDetail #detailDesc {
-    text-align: right;
+    text-align: start;
     line-height: 1.9;
 }
 
@@ -468,7 +854,8 @@ body::-webkit-scrollbar,
     display: inline-flex;
     align-items: center;
     gap: 0.45rem;
-    padding: 4px 12px 4px 4px;
+    padding-block: 4px;
+    padding-inline: 4px 12px;
     border-radius: 999px;
     border: 1px solid rgba(255, 255, 255, 0.12);
     background: rgba(255, 255, 255, 0.05);
@@ -513,7 +900,7 @@ body::-webkit-scrollbar,
     border: 1px solid rgba(255, 255, 255, 0.08);
     background: rgba(255, 255, 255, 0.03);
     border-radius: 18px;
-    text-align: right;
+    text-align: start;
     transition: border-color 0.3s ease, background 0.3s ease;
 }
 
@@ -560,6 +947,9 @@ body::-webkit-scrollbar,
 .contact-input {
     color: #fff;
     caret-color: var(--primary);
+    background: rgba(255, 255, 255, 0.07);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    font-size: 1rem;
 }
 
 .contact-input:focus {
@@ -592,7 +982,8 @@ body::-webkit-scrollbar,
     align-items: center;
     gap: 0.5rem;
     height: 42px;
-    padding: 4px 12px 4px 4px;
+    padding-block: 4px;
+    padding-inline: 4px 12px;
     border-radius: 12px;
     overflow: hidden;
     font-size: 0.85rem;
@@ -649,7 +1040,8 @@ body::-webkit-scrollbar,
     .stack-tag {
         height: 46px;
         font-size: 0.95rem;
-        padding: 5px 14px 5px 5px;
+        padding-block: 5px;
+        padding-inline: 5px 14px;
         gap: 0.6rem;
     }
 
@@ -894,7 +1286,7 @@ body::-webkit-scrollbar,
         content: counter(project, decimal-leading-zero);
         position: absolute;
         top: 1.3rem;
-        left: 1.4rem;
+        inset-inline-start: 1.4rem;
         z-index: 5;
         font-size: 0.65rem;
         font-weight: 800;
@@ -1001,16 +1393,45 @@ body::-webkit-scrollbar,
         touch-action: manipulation;
     }
 
-    /* A card-sized blur behind the contact form is the priciest paint in the
-       section, and nothing meaningful sits behind it to show through. */
-    #contact > div {
+    .contact-glass {
+        padding: 1.35rem 1.15rem 1.4rem;
+        transform: none;
+        will-change: auto;
+        backdrop-filter: blur(16px) saturate(140%);
+        -webkit-backdrop-filter: blur(16px) saturate(140%);
+    }
+
+    /* All five have to stay on one line on the narrowest phones. */
+    .social-icons {
+        flex-wrap: nowrap;
+        gap: 0.45rem;
+    }
+
+    .social-icon {
+        height: 42px;
+        min-width: 42px;
+    }
+
+    .social-icon svg {
+        width: 20px;
+        height: 20px;
+    }
+
+    .marquee {
         backdrop-filter: none;
-        background: rgba(255, 255, 255, 0.045);
+        -webkit-backdrop-filter: none;
+        padding: 1.35rem 0;
+    }
+
+    .marquee-mark {
+        opacity: 0.05;
+        width: 140px;
+        height: 140px;
     }
 
     .marquee-content {
         gap: 1.25rem;
-        padding-right: 1.25rem;
+        padding-inline-end: 1.25rem;
     }
 
     /* iOS zooms the page in when a focused field is under 16px. */
@@ -1040,13 +1461,131 @@ body::-webkit-scrollbar,
     }
 }
 
-@media (prefers-reduced-motion: reduce) {
-    .scroll-cue span {
-        animation: none;
+@media (min-width: 768px) {
+    .contact-glass {
+        padding: 2.4rem 2.25rem 2rem;
+        border-radius: 36px;
     }
+}
 
-    .mnav-pill {
-        transition: none;
+/* --- Arabic / RTL --- */
+html[dir="rtl"] {
+    --lh-body: 1.85;
+}
+
+html[dir="rtl"] body {
+    font-family: 'Tajawal', 'Outfit', sans-serif;
+}
+
+html[dir="rtl"] .hero-title,
+html[dir="rtl"] .section-title,
+html[dir="rtl"] .contact-title,
+html[dir="rtl"] .about-stack-title,
+html[dir="rtl"] .hero-bio,
+html[dir="rtl"] .about-lead,
+html[dir="rtl"] .about-copy,
+html[dir="rtl"] .project-blurb,
+html[dir="rtl"] .hero-available,
+html[dir="rtl"] .loader-text,
+html[dir="rtl"] .swipe-hint,
+html[dir="rtl"] .view-all-btn,
+html[dir="rtl"] .project-card-cta,
+html[dir="rtl"] .mnav-item span,
+html[dir="rtl"] .lang-toggle button,
+html[dir="rtl"] .social-icon-text,
+html[dir="rtl"] .btn-primary,
+html[dir="rtl"] .btn-secondary,
+html[dir="rtl"] #detailTag,
+html[dir="rtl"] [data-i18n^="detail."] {
+    letter-spacing: 0;
+    font-style: normal;
+    text-transform: none;
+}
+
+html[dir="rtl"] .hero-title {
+    line-height: 1.25;
+    font-weight: 800;
+}
+
+html[dir="rtl"] .section-title,
+html[dir="rtl"] .contact-title {
+    line-height: 1.35;
+    font-weight: 800;
+}
+
+html[dir="rtl"] .hero-bio,
+html[dir="rtl"] .about-lead,
+html[dir="rtl"] .about-copy,
+html[dir="rtl"] .project-blurb,
+html[dir="rtl"] #detailDesc,
+html[dir="rtl"] .detail-point p {
+    line-height: 1.9;
+}
+
+html[dir="rtl"] .mnav-item span {
+    font-size: 11px;
+    font-weight: 700;
+}
+
+html[dir="rtl"] .view-all-btn,
+html[dir="rtl"] .hero-available,
+html[dir="rtl"] .project-card-cta {
+    font-weight: 700;
+}
+
+html[dir="rtl"] .hero-available {
+    font-size: 10px;
+    letter-spacing: 0;
+}
+
+/* Latin project names keep their own font, and isolating them stops the bidi
+   algorithm from reordering words — but they still align with the Arabic copy. */
+html[dir="rtl"] .horizontal-item h3,
+html[dir="rtl"] #detailTitle {
+    unicode-bidi: isolate;
+    font-family: 'Outfit', sans-serif;
+}
+
+html[dir="rtl"] .marquee-content {
+    direction: rtl;
+}
+
+html[dir="rtl"] .marquee-content span {
+    text-transform: none;
+    letter-spacing: 0;
+    font-weight: 800;
+}
+
+html[dir="rtl"] .marquee-mark {
+    right: auto;
+    left: 7%;
+}
+
+html[dir="rtl"] .marquee--alt .marquee-mark {
+    left: auto;
+    right: 8%;
+}
+
+html[dir="rtl"] .project-card-cta::after {
+    content: '←';
+}
+
+html[dir="rtl"] .contact-input {
+    text-align: start;
+}
+
+html[dir="rtl"] [class*="tracking-"]:not(#logo):not(#detailTitle) {
+    letter-spacing: 0;
+}
+
+html[dir="rtl"] nav a {
+    text-transform: none;
+    font-weight: 700;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .contact-glass {
+        transform: none;
     }
 }
 

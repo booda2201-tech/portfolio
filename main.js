@@ -5,6 +5,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const isTouch = window.matchMedia('(hover: none), (pointer: coarse)').matches;
     const isSmallScreen = window.__IS_MOBILE__ || window.matchMedia('(max-width: 767px)').matches;
 
+    if (typeof window.applyLang === 'function') {
+        window.applyLang(window.getLang());
+    }
+    document.querySelectorAll('#langToggle [data-lang]').forEach((btn) => {
+        btn.addEventListener('click', () => {
+            if (typeof window.applyLang === 'function') window.applyLang(btn.getAttribute('data-lang'));
+            if (typeof ScrollTrigger !== 'undefined') ScrollTrigger.refresh();
+        });
+    });
+
     // The project reels are several MB each — respect metered / slow connections.
     const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
     const saveData = !!connection && (connection.saveData === true ||
@@ -157,27 +167,47 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Add Floating Glass Shapes
         const geometries = [
-            new THREE.IcosahedronGeometry(10, 0),
-            new THREE.TorusGeometry(10, 3, 16, 100),
-            new THREE.OctahedronGeometry(10, 0)
+            new THREE.TorusGeometry(10, 2.4, 16, 64),
+            new THREE.TorusGeometry(8, 1.6, 12, 48),
+            new THREE.SphereGeometry(5.5, 24, 24),
+            new THREE.IcosahedronGeometry(9, 0),
+            new THREE.OctahedronGeometry(9, 0),
+            new THREE.TetrahedronGeometry(9, 0),
+            new THREE.TorusKnotGeometry(7.5, 2.1, 80, 12),
+            new THREE.RingGeometry(6, 10, 48)
         ];
 
-        const shapeCount = isSmallScreen ? 5 : 15;
-        for(let i=0; i<shapeCount; i++) {
-            const geo = geometries[Math.floor(Math.random() * geometries.length)];
+        const shapeCount = 16;
+        for (let i = 0; i < shapeCount; i++) {
+            const geo = geometries[i % geometries.length];
+            const wireframe = i % 4 === 0;
             const mat = new THREE.MeshPhongMaterial({
                 color: 0xffffff,
                 transparent: true,
-                opacity: 0.1,
-                shininess: 100,
-                specular: 0xffffff
+                opacity: wireframe ? 0.18 : 0.1,
+                shininess: 120,
+                specular: 0xffffff,
+                wireframe,
+                side: THREE.DoubleSide
             });
             const shape = new THREE.Mesh(geo, mat);
-            shape.position.set(Math.random()*400 - 200, Math.random()*400 - 200, Math.random()*400 - 200);
-            shape.rotation.set(Math.random()*Math.PI, Math.random()*Math.PI, Math.random()*Math.PI);
+            const scale = 0.45 + Math.random() * 1.7;
+            shape.scale.setScalar(scale);
+            shape.position.set(
+                (Math.random() - 0.5) * 380,
+                Math.random() * 260 - 30,
+                (Math.random() - 0.5) * 340 - 40
+            );
+            shape.rotation.set(Math.random() * Math.PI, Math.random() * Math.PI, Math.random() * Math.PI);
             floatingShapes.push({
                 mesh: shape,
-                speed: Math.random() * 0.01
+                rotX: 0.006 + Math.random() * 0.014,
+                rotY: 0.005 + Math.random() * 0.012,
+                phase: Math.random() * Math.PI * 2,
+                ampY: 10 + Math.random() * 22,
+                ampX: 6 + Math.random() * 16,
+                baseX: shape.position.x,
+                baseY: shape.position.y
             });
             scene.add(shape);
         }
@@ -190,9 +220,11 @@ document.addEventListener('DOMContentLoaded', () => {
         if (document.hidden) return;
         cloudParticles.forEach(p => { p.rotation.z -=0.002; });
         floatingShapes.forEach(s => {
-            s.mesh.rotation.x += s.speed;
-            s.mesh.rotation.y += s.speed;
-            s.mesh.position.y += Math.sin(Date.now() * 0.001) * 0.05;
+            s.mesh.rotation.x += s.rotX;
+            s.mesh.rotation.y += s.rotY;
+            const t = Date.now() * 0.001;
+            s.mesh.position.y = s.baseY + Math.sin(t * 0.9 + s.phase) * s.ampY;
+            s.mesh.position.x = s.baseX + Math.cos(t * 0.55 + s.phase) * s.ampX;
         });
         renderer.render(scene, camera);
     }
@@ -229,40 +261,16 @@ document.addEventListener('DOMContentLoaded', () => {
         // SplitType Reveal
         const revealTexts = document.querySelectorAll('.reveal-text');
         revealTexts.forEach(text => {
-            // A body paragraph splits into a few hundred chars, and at 0.01s of
-            // stagger each that reads as a 3-second broken-looking crawl on a
-            // phone. Headings are short enough to keep the per-character reveal.
-            if (isSmallScreen && !/^H[1-6]$/.test(text.tagName)) {
-                gsap.fromTo(text,
-                    { y: 24, opacity: 0 },
-                    {
-                        y: 0,
-                        opacity: 1,
-                        duration: 0.7,
-                        ease: 'power3.out',
-                        scrollTrigger: { trigger: text, start: 'top 92%', once: true }
-                    }
-                );
-                return;
-            }
-
-            const split = new SplitType(text, { types: 'chars, words' });
-            // .reveal-text starts hidden in CSS; the chars carry the animation,
-            // so the wrapper has to be re-shown or headings never appear.
-            gsap.set(text, { opacity: 1 });
-            gsap.from(split.chars, {
-                scrollTrigger: {
-                    trigger: text,
-                    start: "top 85%",
-                    toggleActions: "play none none reverse"
-                },
-                y: 50,
-                rotate: 5,
-                opacity: 0,
-                stagger: 0.01,
-                duration: 0.8,
-                ease: "back.out(1.7)"
-            });
+            gsap.fromTo(text,
+                { y: 24, opacity: 0 },
+                {
+                    y: 0,
+                    opacity: 1,
+                    duration: 0.7,
+                    ease: 'power3.out',
+                    scrollTrigger: { trigger: text, start: 'top 92%', once: true }
+                }
+            );
         });
 
         // Horizontal Scroll — pinned on desktop only; mobile uses native swipe + snap
@@ -270,12 +278,15 @@ document.addEventListener('DOMContentLoaded', () => {
         if (wrapper) {
             gsap.matchMedia().add("(min-width: 768px)", () => {
                 gsap.to(wrapper, {
-                    x: () => -(wrapper.scrollWidth - window.innerWidth),
+                    x: () => {
+                        const dist = wrapper.scrollWidth - window.innerWidth;
+                        return document.documentElement.dir === 'rtl' ? dist : -dist;
+                    },
                     ease: "none",
                     scrollTrigger: {
                         trigger: "#work",
                         start: "top top",
-                        end: () => "+=" + wrapper.scrollWidth,
+                        end: () => "+=" + Math.max(wrapper.scrollWidth - window.innerWidth, 0),
                         scrub: 1,
                         pin: true,
                         anticipatePin: 1,
@@ -356,17 +367,20 @@ document.addEventListener('DOMContentLoaded', () => {
         gsap.set([cursor, follower], { xPercent: -50, yPercent: -50 });
 
         window.addEventListener('mousemove', (e) => {
-            gsap.to(cursor, { x: e.clientX, y: e.clientY, duration: 0.1, ease: 'power2.out' });
-            gsap.to(follower, { x: e.clientX, y: e.clientY, duration: 0.35, ease: 'power2.out' });
+            gsap.to(cursor, { x: e.clientX, y: e.clientY, duration: 0.06, ease: 'power2.out' });
+            gsap.to(follower, { x: e.clientX, y: e.clientY, duration: 0.18, ease: 'power2.out' });
 
             floatingShapes.forEach(s => {
-                const dx = (e.clientX / window.innerWidth - 0.5) * 50;
-                const dy = (e.clientY / window.innerHeight - 0.5) * 50;
-                gsap.to(s.mesh.position, { x: s.mesh.position.x + dx * 0.01, y: s.mesh.position.y - dy * 0.01, duration: 2 });
+                const dx = e.clientX / window.innerWidth - 0.5;
+                const dy = e.clientY / window.innerHeight - 0.5;
+                s.baseX += dx * 0.35;
+                s.baseY -= dy * 0.35;
             });
         });
 
-        const clickable = document.querySelectorAll('a, .btn-primary, .skill-tag');
+        // Social pills are excluded: the enlarged cursor would sit right on top of
+        // the label the pill just revealed.
+        const clickable = document.querySelectorAll('a:not(.social-icon), .btn-primary, .skill-tag');
         clickable.forEach(el => {
             el.addEventListener('mouseenter', () => {
                 cursor.classList.add('active');
@@ -412,6 +426,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const projectData = {
         "T4T STORE": {
             desc: "منصة متكاملة لبراند \"تي فور تي\" لاستعراض وبيع منتجات الشاي الفاخرة، تتميز بنظام سلة تسوق ذكي، وتتبع مباشر لحالة الطلبات والتوصيل.",
+            descEn: "A complete store for the T4T tea brand, with a smart cart and live tracking from checkout to delivery.",
             stack: ["Angular", "TypeScript", "Node.js", "Express", "Tailwind CSS"],
             features: [
                 "سلة تسوق ذكية بتحديث فوري للكميات والأسعار",
@@ -419,10 +434,21 @@ document.addEventListener('DOMContentLoaded', () => {
                 "كتالوج منتجات فاخر يبرز نكهات الشاي بهوية بصرية نظيفة",
                 "رحلة شراء مبسطة من التصفح للدفع بدون تعقيد"
             ],
+            featuresEn: [
+                "Smart cart with live quantity and price updates",
+                "Order tracking from confirmation to delivery",
+                "A clean catalog that puts the tea flavors first",
+                "A short path from browsing to checkout"
+            ],
             ideas: [
                 "ربط هوية البراند الفاخرة بتجربة تجارة إلكترونية سريعة وواضحة",
                 "شفافية كاملة للعميل عبر تتبع الطلب لحظة بلحظة",
                 "واجهة minimalist تركّز على المنتج بدل الإزعاج البصري"
+            ],
+            ideasEn: [
+                "Carry a luxury brand into a fast, clear shopping flow",
+                "Full transparency through live order tracking",
+                "A minimal interface that keeps the product in focus"
             ],
             link: "https://darkslateblue-dove-147065.hostingersite.com/",
             tag: "T4T - Tea E-commerce Store",
@@ -443,6 +469,7 @@ document.addEventListener('DOMContentLoaded', () => {
         },
         "REBHNY": {
             desc: "منصة \"ربحني\" المتكاملة للمزايدات الحية، تتميز بتتبع اللحظة بالثانية للمزايدات، نظام إدارة نقاط دقيق، ولوحة تحكم احترافية لمراقبة الـ Countdowns والعمليات التي تتم في الوقت الفعلي.",
+            descEn: "A live auction platform with second-by-second bids, a points system, and a dashboard for realtime countdowns.",
             stack: ["Angular", "TypeScript", "Node.js", "Express", "Socket.io", "Tailwind CSS"],
             features: [
                 "مزايدات حية تتحدث بالثانية عبر Socket.io بدون إعادة تحميل",
@@ -450,10 +477,21 @@ document.addEventListener('DOMContentLoaded', () => {
                 "نظام نقاط دقيق لإدارة الرصيد والمزايدات",
                 "لوحة تحكم احترافية لمراقبة العمليات المباشرة والمعاملات"
             ],
+            featuresEn: [
+                "Live bids over Socket.io with no page refresh",
+                "A shared countdown across every open session",
+                "A precise points system for balance and bidding",
+                "An admin dashboard for live operations"
+            ],
             ideas: [
                 "منصة مزاد realtime كاملة بدون ريفرش للصفحة",
                 "مزامنة العدّاد عبر كل الجلسات النشطة في نفس اللحظة",
                 "تجربة مزاد تنافسية أقرب للبث المباشر من المواقع التقليدية"
+            ],
+            ideasEn: [
+                "A full realtime auction without reloading the page",
+                "One countdown kept in sync for every active session",
+                "A competitive feel closer to a live stream than a classic site"
             ],
             link: "#",
             tag: "Rebhny - Real-time Auction System",
@@ -466,6 +504,7 @@ document.addEventListener('DOMContentLoaded', () => {
         },
         "FORTNO": {
             desc: "واجهة رقمية فاخرة لعلامة \"فورتو\" للعناية بالسيارات، تتميز بهوية \"شياكة\" العربية مع تجربة مستخدم تفاعلية وراقية تعكس جودة الخدمات المقدمة.",
+            descEn: "A luxury digital face for Fortno car care, mixing Arabic elegance with a refined interactive experience.",
             stack: ["Angular", "TypeScript", "Tailwind CSS", "GSAP"],
             features: [
                 "واجهة فاخرة تعكس جودة خدمات العناية بالسيارات",
@@ -473,10 +512,21 @@ document.addEventListener('DOMContentLoaded', () => {
                 "معرض صور عالي الدقة للنتائج والخدمات",
                 "تجربة متجاوبة كاملة للجوال والديسكتوب"
             ],
+            featuresEn: [
+                "A luxury interface that matches the quality of the service",
+                "Arabic brand identity inside a modern web layout",
+                "A high-resolution gallery for results and services",
+                "A fully responsive experience on phone and desktop"
+            ],
             ideas: [
                 "ترجمة الفخامة العربية إلى لغة ويب حديثة بدون فقدان الهوية",
                 "تجربة بصرية cinematic تقنع بالجودة قبل الحجز",
                 "تحسين تحميل الأصول لمعارض الصور عالية الدقة"
+            ],
+            ideasEn: [
+                "Translate Arabic luxury into a modern web language",
+                "A cinematic first impression before the booking",
+                "Careful loading for large photo galleries"
             ],
             link: "#",
             tag: "Fortno Car Care",
@@ -490,6 +540,7 @@ document.addEventListener('DOMContentLoaded', () => {
         },
         "AL HENDAL": {
             desc: "الموقع الرسمي لمجموعة \"الهندال\" القابضة، يدعم اللغتين العربية والإنجليزية (RTL/LTR) مع بنية برمجية متطورة للترجمة وتأثيرات حركية متقدمة باستخدام GSAP.",
+            descEn: "The official site for Al Hendal Holding, with full Arabic/English RTL-LTR support and GSAP motion.",
             stack: ["Angular", "TypeScript", "ngx-translate", "GSAP", "AOS", "Tailwind CSS"],
             features: [
                 "دعم كامل للعربية والإنجليزية مع تبديل RTL/LTR",
@@ -497,12 +548,23 @@ document.addEventListener('DOMContentLoaded', () => {
                 "بنية ترجمة مركزية قابلة للتوسع عبر صفحات المجموعة",
                 "حضور رقمي يعكس هوية هولدينج متعدد الأنشطة"
             ],
+            featuresEn: [
+                "Full Arabic and English with RTL/LTR switching",
+                "Corporate motion with GSAP and AOS",
+                "A central translation layer that scales across pages",
+                "A digital presence that fits a multi-activity holding"
+            ],
             ideas: [
                 "تبديل اتجاه الصفحة بسلاسة بدون كسر التخطيط أو الأنيميشن",
                 "حركة GSAP تحافظ على الفخامة المؤسسية بدل التأثيرات الاستعراضية",
                 "معمارية Angular قابلة لإعادة الاستخدام عبر مشاريع الهولدينج"
             ],
-            link: "#",
+            ideasEn: [
+                "Switch page direction without breaking layout or motion",
+                "GSAP that keeps a corporate tone instead of showing off",
+                "An Angular setup that can be reused across group sites"
+            ],
+            link: "https://alhendalgroup.com/",
             tag: "Al Hendal Holding Group",
             images: [
                 "assets/imges/a1.png",
@@ -511,6 +573,7 @@ document.addEventListener('DOMContentLoaded', () => {
         },
         "BUBBLE HOPE": {
             desc: "منصة تسوق إلكترونية متطورة مصممة لتجربة تصفح سلسة، تهدف إلى تسهيل عمليات عرض وبيع المنتجات عبر واجهة مستخدم عصرية وأنيقة.",
+            descEn: "An e-commerce platform built for smooth browsing and a clear path from product to purchase.",
             stack: ["Angular", "TypeScript", "Node.js", "Tailwind CSS"],
             features: [
                 "تصفح متعدد الفئات بتجربة سلسة وسريعة",
@@ -518,10 +581,21 @@ document.addEventListener('DOMContentLoaded', () => {
                 "تنقل واضح ونقاط تفاعل آمنة للمستخدم",
                 "تجربة تسوق مبسطة ومتجاوبة على كل الشاشات"
             ],
+            featuresEn: [
+                "Fast browsing across multiple categories",
+                "A modern layout that keeps products easy to scan",
+                "Clear navigation and safe interaction points",
+                "A simple shopping flow on every screen size"
+            ],
             ideas: [
                 "تبسيط رحلة الشراء لتقليل خطوات التحويل",
                 "تصميم يعطي أولوية للمنتج مع حركة ناعمة غير مشتتة",
                 "تجربة تصفح أقرب للتطبيق من المواقع التقليدية"
+            ],
+            ideasEn: [
+                "Fewer steps between interest and checkout",
+                "Motion that stays quiet so the product stays first",
+                "A browsing feel closer to an app than a classic shop"
             ],
             link: "https://www.bubblehope.com",
             tag: "Bubble Hope",
@@ -537,6 +611,7 @@ document.addEventListener('DOMContentLoaded', () => {
         },
         "MOONLIGHT": {
             desc: "منصة إبداعية لمؤسسة سعودية متخصصة في إدارة الفعاليات الكبرى. يتميز التصميم بالطابع الليلي الفاخر (Dark Mode) مع عرض بورتفوليو بصري مبهر للمشاريع الضخمة مثل Boulevard World.",
+            descEn: "A dark-mode platform for a Saudi events house, built to showcase large productions like Boulevard World.",
             stack: ["JavaScript", "GSAP", "Tailwind CSS", "HTML5"],
             features: [
                 "Dark Mode فاخر يناسب هوية الفعاليات الليلية",
@@ -544,10 +619,21 @@ document.addEventListener('DOMContentLoaded', () => {
                 "أنيميشن GSAP سينمائي مرتبط بالتمرير",
                 "تصميم متجاوب لعرض الفعاليات الكبرى بوضوح"
             ],
+            featuresEn: [
+                "A luxury dark mode that fits night-time events",
+                "A visual portfolio for large productions like Boulevard World",
+                "Cinematic GSAP tied to scroll",
+                "A responsive layout that keeps big events readable"
+            ],
             ideas: [
                 "الهوية الليلية كتجربة كاملة وليس مجرد ثيم داكن",
                 "سرد بصري للفعاليات الكبرى بدل الكتالوج التقليدي",
                 "حركة GSAP تربط المشاهد كأنها عرض حدث حي"
+            ],
+            ideasEn: [
+                "Night identity as a full experience, not just a dark theme",
+                "Tell the event story visually instead of a catalog",
+                "GSAP that links scenes like a live show"
             ],
             link: "https://moonlight.sa",
             tag: "Moonlight Events",
@@ -558,30 +644,44 @@ document.addEventListener('DOMContentLoaded', () => {
                 "assets/imges/moon4.png"
             ]
         },
-        "VIGANIUM AI": {
-            desc: "موقع تقني متطور لشركة حلول برمجية وذكاء اصطناعي، يعتمد على هوية بصرية قوية وعناصر ثلاثية الأبعاد لشرح خدمات التحول الرقمي والتسويق الذكي بأسلوب تفاعلي عصري.",
-            stack: ["Node.js", "JavaScript", "Three.js", "GSAP", "Tailwind CSS"],
+        "ALAMANA": {
+            desc: "متجر إلكتروني متكامل لشركة \"الأمانة لمواد البناء\"، متخصص في العزل المائي ولواصق البلاط والترويبات ومواد الترميم، بكتالوج تفاعلي وواجهة ثنائية اللغة تخدم فروع الشركة في الكويت ومصر وعمان وتركيا.",
+            descEn: "A full store for Alamana Building Materials — waterproofing, tile adhesives, grouts and repair products — with an interactive catalog and a bilingual interface serving branches in Kuwait, Egypt, Oman and Turkey.",
+            stack: ["Angular", "TypeScript", "Bootstrap", "Tailwind CSS", "SEO"],
             features: [
-                "عناصر ثلاثية الأبعاد لشرح الخدمات التقنية بشكل تفاعلي",
-                "عرض حلول الذكاء الاصطناعي والتحول الرقمي بوضوح",
-                "هوية بصرية قوية تناسب شركة تقنية حديثة",
-                "تجربة تفاعلية للتسويق الذكي بدل الصفحات التعريفية الجامدة"
+                "متجر كامل بسلة شراء وتسجيل دخول وسجل للطلبات السابقة",
+                "كتالوج تفاعلي بتقليب الصفحات مع تحميل وطباعة المواصفات",
+                "تبديل اللغة عربي/إنجليزي وتبديل البلد بين الكويت ومصر وعمان وتركيا",
+                "بحث بالاسم العربي أو الإنجليزي وتصفية بالأقسام: لواصق، عوازل، ترميم"
+            ],
+            featuresEn: [
+                "A full store with cart, login and a previous-orders history",
+                "An interactive page-flip catalog with download and print",
+                "Arabic/English switching plus a country switch for Kuwait, Egypt, Oman and Turkey",
+                "Search by Arabic or English name with category filters for adhesives, insulation and repair"
             ],
             ideas: [
-                "استخدام 3D لتبسيط خدمات الذكاء الاصطناعي المعقدة",
-                "موقع يشرح التحول الرقمي بالحركة وليس بالنصوص فقط",
-                "دمج الهوية التقنية مع storytelling بصري يقنع العميل"
+                "تحويل الكتالوج المطبوع لتجربة تفاعلية داخل الموقع بدل ملف PDF",
+                "واجهة واحدة تخدم أربع أسواق بلغتين بدون تكرار المحتوى",
+                "بحث يفهم أسماء مواد البناء بالعربي والإنجليزي معًا"
             ],
-            link: "https://viganium.com/ar",
-            tag: "Viganium AI",
+            ideasEn: [
+                "Turn the printed catalog into an in-site experience instead of a PDF",
+                "One interface serving four markets in two languages without duplicated content",
+                "Search that understands material names in both Arabic and English"
+            ],
+            link: "https://alamanamarket.com/",
+            tag: "Alamana Building Materials",
             images: [
-                "assets/imges/vig1.png",
-                "assets/imges/vig2.png",
-                "assets/imges/vig3.png"
+                "assets/imges/am1.jpg",
+                "assets/imges/am2.jpg",
+                "assets/imges/am3.jpg",
+                "assets/imges/am4.jpg"
             ]
         },
         "GULF FOOD": {
             desc: "واجهة رقمية متكاملة لمصنع أغذية رائد، تركز على استعراض جودة المخبوزات والمنتجات الغذائية بتصميم بصري جذاب، مع تنظيم دقيق للأقسام التعريفية وقوائم المنتجات والشهادات العالمية.",
+            descEn: "A digital face for a leading food factory, with catalog pages, certificates, and a clear look at product quality.",
             stack: ["Angular", "TypeScript", "Tailwind CSS", "HTML5"],
             features: [
                 "كتالوج منظم للمخبوزات والمنتجات الغذائية",
@@ -589,10 +689,21 @@ document.addEventListener('DOMContentLoaded', () => {
                 "أقسام تعريفية واضحة عن المصنع والإنتاج",
                 "تصميم RTL بصري يبرز جودة المنتج قبل التفاصيل"
             ],
+            featuresEn: [
+                "An organized catalog for bakery and food products",
+                "Certificates and global quality standards on display",
+                "Clear sections about the factory and production",
+                "An RTL visual design that shows quality before the details"
+            ],
             ideas: [
                 "موقع مصنع أغذية يبني الثقة بصريًا عبر الشهادات والجودة",
                 "تنظيم الكتالوج ليخدم العملاء والشركاء معًا",
                 "هوية خليجية حديثة بعيدًا عن قوالب مواقع المصانع التقليدية"
+            ],
+            ideasEn: [
+                "Build trust visually through certificates and quality",
+                "A catalog that serves both clients and partners",
+                "A modern Gulf identity away from generic factory templates"
             ],
             link: "https://gcfoodfactory.com",
             tag: "Gulf Food Factory",
@@ -733,7 +844,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
         detailTitle.innerText = title;
         detailTag.innerText = dataFull.tag || 'Project';
-        detailDesc.innerText = dataFull.desc || '';
+        const isAr = window.getLang() === 'ar';
+        detailDesc.innerText = (isAr ? dataFull.desc : (dataFull.descEn || dataFull.desc)) || '';
+        detailDesc.dir = isAr ? 'rtl' : 'ltr';
+        detailFeatures.dir = isAr ? 'rtl' : 'ltr';
+        detailIdeas.dir = isAr ? 'rtl' : 'ltr';
         detailCounter.innerText = `1 / ${activeDetail.media.length || 1}`;
         renderDetailMedia(activeDetail.media[0]);
 
@@ -775,8 +890,8 @@ document.addEventListener('DOMContentLoaded', () => {
             detailStack.appendChild(span);
         });
 
-        renderPointList(detailFeatures, dataFull.features);
-        renderPointList(detailIdeas, dataFull.ideas);
+        renderPointList(detailFeatures, isAr ? dataFull.features : (dataFull.featuresEn || dataFull.features));
+        renderPointList(detailIdeas, isAr ? dataFull.ideas : (dataFull.ideasEn || dataFull.ideas));
 
         const featuresWrap = detailFeatures.closest('.detail-reveal');
         const ideasWrap = detailIdeas.closest('.detail-reveal');
@@ -904,6 +1019,27 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
+    // The archive page links back here as index.html?project=NAME, so a case
+    // study can be opened without its card living in the home slider.
+    (function openProjectFromQuery() {
+        const requested = new URLSearchParams(location.search).get('project');
+        if (!requested) return;
+        const data = projectData[requested.trim().toUpperCase()];
+        if (!data) return;
+
+        const name = requested.trim().toUpperCase();
+        const first = (data.media && data.media[0] && data.media[0].src) || (data.images && data.images[0]) || '';
+
+        // Park the page on the work section so closing the case study lands the
+        // visitor next to the projects instead of at the top of the hero.
+        setTimeout(() => {
+            const work = document.querySelector('#work');
+            if (work) window.scrollTo({ top: work.offsetTop, behavior: 'auto' });
+            openProjectDetail(name, data, first);
+            history.replaceState(null, '', location.pathname);
+        }, 1200);
+    })();
+
     closeDetail.addEventListener('click', closeProjectDetail);
 
     document.addEventListener('keydown', (e) => {
@@ -949,43 +1085,7 @@ document.addEventListener('DOMContentLoaded', () => {
         gsap.to(window, { duration: 2, scrollTo: 0, ease: "expo.inOut" });
     });
 
-    // 8. Navigation & Fullscreen Menu
-    const menuToggle = document.querySelector('#menuToggle');
-    const fsMenu = document.querySelector('#fsMenu');
-    const menuLinks = document.querySelectorAll('.menu-link');
-    let menuOpen = false;
-
-    menuToggle.addEventListener('click', () => {
-        menuOpen = !menuOpen;
-        if (menuOpen) {
-            fsMenu.classList.remove('translate-x-full');
-            gsap.to(menuLinks, {
-                x: 0,
-                opacity: 1,
-                stagger: 0.1,
-                delay: 0.5,
-                duration: 0.8,
-                ease: "power4.out"
-            });
-            // Animate menu toggle icon
-            gsap.to('#menuToggle span:nth-child(1)', { rotate: 45, y: 6, duration: 0.3 });
-            gsap.to('#menuToggle span:nth-child(2)', { opacity: 0, duration: 0.3 });
-            gsap.to('#menuToggle span:nth-child(3)', { rotate: -45, y: -6, duration: 0.3 });
-        } else {
-            fsMenu.classList.add('translate-x-full');
-            gsap.to(menuLinks, { x: 20, opacity: 0, duration: 0.5 });
-            gsap.to('#menuToggle span', { rotate: 0, y: 0, opacity: 1, duration: 0.3 });
-        }
-    });
-
-    menuLinks.forEach(link => {
-        link.addEventListener('click', () => {
-            menuOpen = false;
-            fsMenu.classList.add('translate-x-full');
-            gsap.to('#menuToggle span', { rotate: 0, y: 0, opacity: 1, duration: 0.3 });
-        });
-    });
-
+    // 8. Navigation
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         const href = anchor.getAttribute('href');
         if (!href || href === '#') return;
@@ -1073,6 +1173,9 @@ document.addEventListener('DOMContentLoaded', () => {
         window.addEventListener('resize', () => {
             requestAnimationFrame(() => setActive(activeId));
         });
+        window.addEventListener('langchange', () => {
+            requestAnimationFrame(() => setActive(activeId));
+        });
     })();
 
     // 8c. Mobile project carousel dots
@@ -1081,6 +1184,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const dotsWrap = document.querySelector('#projectDots');
         const items = Array.from(document.querySelectorAll('.horizontal-item'));
         if (!scroller || !dotsWrap || !items.length) return;
+
+        const visibleItems = () => items.filter(el => getComputedStyle(el).display !== 'none');
 
         const mq = window.matchMedia('(max-width: 767px)');
         let active = 0;
@@ -1097,7 +1202,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const mid = scroller.getBoundingClientRect().left + scroller.clientWidth / 2;
             let best = 0;
             let dist = Infinity;
-            items.forEach((item, i) => {
+            items.filter(el => getComputedStyle(el).display !== 'none').forEach((item, i) => {
                 const r = item.getBoundingClientRect();
                 const d = Math.abs(r.left + r.width / 2 - mid);
                 if (d < dist) {
@@ -1111,13 +1216,14 @@ document.addEventListener('DOMContentLoaded', () => {
         const render = () => {
             dotsWrap.innerHTML = '';
             if (!mq.matches) return;
-            items.forEach((_, i) => {
+            visibleItems().forEach((_, i) => {
                 const btn = document.createElement('button');
                 btn.type = 'button';
                 btn.className = 'project-dot' + (i === 0 ? ' is-active' : '');
                 btn.setAttribute('aria-label', 'Go to project ' + (i + 1));
                 btn.addEventListener('click', () => {
-                    items[i].scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+                    const target = visibleItems()[i];
+                    if (target) target.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
                 });
                 dotsWrap.appendChild(btn);
             });
@@ -1445,19 +1551,19 @@ document.addEventListener('DOMContentLoaded', () => {
             const message = (contactMessage && contactMessage.value || '').trim();
 
             if (!name || !email || !message) {
-                setContactStatus('املأ الاسم والإيميل والرسالة', '#f87171');
+                setContactStatus(window.t('contact.needFields'), '#f87171');
                 return;
             }
 
             const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
             if (!emailOk) {
-                setContactStatus('الإيميل مش صحيح', '#f87171');
+                setContactStatus(window.t('contact.badEmail'), '#f87171');
                 return;
             }
 
             const text = [
-                `مرحبا عبدالرحمن، أنا ${name}`,
-                `الإيميل: ${email}`,
+                `${window.t('wa.hello')} ${name}`,
+                `${window.t('wa.email')}: ${email}`,
                 '',
                 message
             ].join('\n');
@@ -1465,8 +1571,81 @@ document.addEventListener('DOMContentLoaded', () => {
             const waUrl = `https://wa.me/201127273643?text=${encodeURIComponent(text)}`;
             const opened = window.open(waUrl, '_blank', 'noopener');
             if (!opened) window.location.href = waUrl;
-            setContactStatus('هيفتح واتساب لإرسال الرسالة ✓', '#34d399');
+            setContactStatus(window.t('contact.sent'), '#34d399');
             contactForm.reset();
         });
     }
+
 });
+
+// Kept outside the main DOMContentLoaded block so the tilt survives even if an
+// animation library above it fails to load.
+(function contactCardTilt() {
+    const start = () => {
+        const card = document.querySelector('#contactGlass');
+        if (!card) return;
+        if (window.matchMedia('(hover: none), (pointer: coarse)').matches) return;
+
+        const REST_X = 6;
+        let rotX = REST_X;
+        let rotY = 0;
+        let lift = 0;
+        let frame = 0;
+
+        const render = () => {
+            frame = 0;
+            card.style.transform = `translateY(${lift}px) rotateX(${rotX}deg) rotateY(${rotY}deg)`;
+        };
+        const schedule = () => {
+            if (!frame) frame = requestAnimationFrame(render);
+        };
+
+        card.addEventListener('mousemove', (e) => {
+            const r = card.getBoundingClientRect();
+            rotY = ((e.clientX - r.left) / r.width - 0.5) * 16;
+            rotX = REST_X - ((e.clientY - r.top) / r.height - 0.5) * 14;
+            lift = -8;
+            schedule();
+        });
+
+        card.addEventListener('mouseleave', () => {
+            rotY = 0;
+            rotX = REST_X;
+            lift = 0;
+            schedule();
+        });
+    };
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', start);
+    } else {
+        start();
+    }
+})();
+
+// The social pills expand to the exact width of their label, so each one has to
+// be measured once the webfont is in place.
+(function measureSocialLabels() {
+    const measure = () => {
+        document.querySelectorAll('.social-icon').forEach((icon) => {
+            const label = icon.querySelector('.social-icon-text');
+            if (!label) return;
+            label.style.width = 'auto';
+            const width = Math.ceil(label.getBoundingClientRect().width);
+            label.style.width = '';
+            if (width) icon.style.setProperty('--label-w', width + 'px');
+        });
+    };
+
+    const start = () => {
+        measure();
+        if (document.fonts && document.fonts.ready) document.fonts.ready.then(measure);
+        window.addEventListener('langchange', measure);
+    };
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', start);
+    } else {
+        start();
+    }
+})();

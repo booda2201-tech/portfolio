@@ -1,0 +1,1145 @@
+/* Archive page — the full project list linked from "View all" on the home page.
+   Shares the home page shell (index.css) and only adds the archive layout. */
+
+:root {
+    --nav-h: 56px;
+    /* Shared content cap so the header, filter bar, grid and index all line up. */
+    --wrap: 1600px;
+}
+
+/* Very wide displays get a fourth column, which also divides the eight
+   projects into exactly two rows. */
+@media (min-width: 1900px) {
+    :root {
+        --wrap: 2000px;
+    }
+}
+
+.archive-nav {
+    position: fixed;
+    top: 0;
+    inset-inline: 0;
+    z-index: 20003;
+    /* Three tracks keep the links centred even though the logo and the language
+       group have very different widths. */
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.15rem 6%;
+    background: transparent;
+    border-bottom: 1px solid transparent;
+    transition: background 0.35s ease, padding 0.35s ease, border-color 0.35s ease,
+        backdrop-filter 0.35s ease;
+}
+
+.archive-nav.is-scrolled {
+    padding-block: 0.75rem;
+    background: rgba(5, 5, 5, 0.72);
+    border-bottom-color: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(18px) saturate(150%);
+    -webkit-backdrop-filter: blur(18px) saturate(150%);
+}
+
+/* The links track is display:none on mobile, which drops it out of grid
+   auto-placement and would slide the action group into the middle column. Each
+   child is pinned to its own track so the layout holds at every width. */
+.archive-nav > #logo {
+    grid-column: 1;
+}
+
+.archive-nav > .archive-nav-links {
+    grid-column: 2;
+}
+
+.archive-nav > .archive-nav-actions {
+    grid-column: 3;
+}
+
+.archive-nav-links {
+    display: none;
+    justify-self: center;
+    white-space: nowrap;
+    gap: 2rem;
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+}
+
+@media (min-width: 768px) {
+    .archive-nav-links {
+        display: flex;
+    }
+}
+
+.archive-nav-links a {
+    position: relative;
+    padding-bottom: 2px;
+    transition: color 0.25s ease;
+}
+
+.archive-nav-links a::after {
+    content: '';
+    position: absolute;
+    inset-inline-start: 0;
+    bottom: -2px;
+    width: 0;
+    height: 1px;
+    background: currentColor;
+    transition: width 0.3s cubic-bezier(0.22, 0.8, 0.2, 1);
+}
+
+.archive-nav-links a:hover {
+    color: var(--primary);
+}
+
+.archive-nav-links a:hover::after {
+    width: 100%;
+}
+
+.archive-back {
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    border-radius: 999px;
+    padding: 0.5rem 1.05rem;
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    transition: background 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+}
+
+.archive-back:hover {
+    background: #fff;
+    color: #050505;
+    border-color: #fff;
+}
+
+/* --- Header --- */
+.archive-head {
+    position: relative;
+    /* Own stacking context so the ghost word can sit behind the copy without
+       dropping behind the page background. */
+    isolation: isolate;
+    padding: 8rem 6% 2.5rem;
+    max-width: var(--wrap);
+    margin: 0 auto;
+}
+
+/* Outlined ghost word behind the heading — drifts sideways on scroll. */
+.archive-ghost {
+    position: absolute;
+    top: 3.25rem;
+    inset-inline-start: -2vw;
+    z-index: -1;
+    white-space: nowrap;
+    pointer-events: none;
+    font-size: clamp(5rem, 19vw, 15rem);
+    font-weight: 900;
+    font-style: italic;
+    letter-spacing: -0.04em;
+    line-height: 1;
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(255, 255, 255, 0.075);
+    will-change: transform;
+}
+
+.archive-eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    font-size: 0.65rem;
+    font-weight: 800;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    opacity: 0.5;
+    margin-bottom: 1.1rem;
+}
+
+.archive-eyebrow-rule {
+    width: 2.5rem;
+    height: 1px;
+    background: currentColor;
+    opacity: 0.6;
+}
+
+/* Clips the heading so it can rise into view without breaking the gradient fill. */
+.archive-title-mask {
+    overflow: hidden;
+    padding-bottom: 0.12em;
+}
+
+.archive-title {
+    font-size: clamp(2.4rem, 8vw, 6rem);
+    line-height: 1;
+    font-weight: 900;
+    font-style: italic;
+    letter-spacing: -0.04em;
+    text-transform: uppercase;
+    background: linear-gradient(92deg, #fff, var(--primary), var(--secondary), #fff);
+    background-size: 220% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: archive-shine 8s linear infinite;
+    filter: drop-shadow(0 0 30px rgba(139, 92, 246, 0.18));
+}
+
+@keyframes archive-shine {
+    to {
+        background-position: 220% center;
+    }
+}
+
+.archive-lead {
+    max-width: 46rem;
+    margin-top: 1.35rem;
+    font-size: clamp(0.98rem, 1.3vw, 1.15rem);
+    line-height: 1.8;
+    opacity: 0.6;
+}
+
+.archive-stats {
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 2.25rem;
+    padding: 1.1rem 1.35rem;
+    border-radius: 22px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: linear-gradient(150deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02));
+    backdrop-filter: blur(14px) saturate(140%);
+    -webkit-backdrop-filter: blur(14px) saturate(140%);
+    width: fit-content;
+    max-width: 100%;
+}
+
+.archive-stat {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    padding-inline: 1.35rem;
+    border-inline-start: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.archive-stat:first-child {
+    border-inline-start: 0;
+    padding-inline-start: 0.35rem;
+}
+
+.archive-stat strong {
+    font-size: 1.75rem;
+    font-weight: 900;
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+    font-variant-numeric: tabular-nums;
+}
+
+.archive-stat span {
+    font-size: 0.62rem;
+    font-weight: 800;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    opacity: 0.5;
+}
+
+/* --- Filter bar --- */
+/* Sticks just under the fixed nav so the categories stay reachable while
+   scrolling a long archive. */
+.archive-filterbar {
+    position: sticky;
+    top: var(--nav-h);
+    z-index: 40;
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    max-width: var(--wrap);
+    margin: 0 auto;
+    padding: 1rem 6% 1.1rem;
+}
+
+/* The bar is width-capped to line up with the grid, but its backdrop has to
+   bleed to both screen edges or cards would show through while it is stuck. */
+.archive-filterbar::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    inset-inline: calc((100% - 100vw) / 2);
+    z-index: -1;
+    background: rgba(5, 5, 5, 0.78);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    backdrop-filter: blur(16px) saturate(140%);
+    -webkit-backdrop-filter: blur(16px) saturate(140%);
+}
+
+.archive-filter-label {
+    flex: none;
+    font-size: 0.6rem;
+    font-weight: 800;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    opacity: 0.35;
+}
+
+.archive-filters {
+    display: flex;
+    flex: 1 1 auto;
+    min-width: 0;
+    gap: 0.5rem;
+    overflow-x: auto;
+    scrollbar-width: none;
+    padding-block: 0.25rem;
+    -webkit-overflow-scrolling: touch;
+}
+
+.archive-filters::-webkit-scrollbar {
+    display: none;
+}
+
+.archive-chip {
+    flex: none;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    background: rgba(255, 255, 255, 0.04);
+    color: #fff;
+    border-radius: 999px;
+    padding: 0.5rem 1.05rem;
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    transition: background 0.25s ease, color 0.25s ease, border-color 0.25s ease,
+        transform 0.2s ease;
+}
+
+.archive-chip:hover {
+    border-color: rgba(255, 255, 255, 0.4);
+}
+
+.archive-chip:active {
+    transform: scale(0.96);
+}
+
+.archive-chip.is-active {
+    background: linear-gradient(140deg, var(--primary), var(--secondary));
+    border-color: transparent;
+    box-shadow: 0 10px 26px rgba(139, 92, 246, 0.28);
+}
+
+/* --- Layout switch --- */
+.view-toggle {
+    flex: none;
+    margin-inline-start: auto;
+    display: flex;
+    gap: 2px;
+    padding: 3px;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    background: rgba(255, 255, 255, 0.04);
+}
+
+.view-toggle button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.4rem 0.85rem;
+    border: 0;
+    border-radius: 999px;
+    background: transparent;
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 0.62rem;
+    font-weight: 800;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    transition: background 0.25s ease, color 0.25s ease;
+}
+
+.view-toggle button svg {
+    width: 14px;
+    height: 14px;
+}
+
+.view-toggle button.is-active {
+    background: #fff;
+    color: #050505;
+}
+
+html[data-view="index"] .projects-grid,
+html[data-view="grid"] .projects-index {
+    display: none;
+}
+
+/* While GSAP Flip drives a filter change it owns transform/opacity outright. */
+.projects-grid.is-flipping .pcard,
+.projects-index.is-flipping .pindex-row {
+    transition: none;
+}
+
+/* The filter animation drives this height, and scroll anchoring on top of that
+   would fight it and shift the page under the reader. */
+main {
+    position: relative;
+    overflow-anchor: none;
+}
+
+/* --- Index view --- */
+.projects-index {
+    max-width: var(--wrap);
+    margin: 0 auto;
+    padding: 0.75rem 6% 4rem;
+}
+
+.pindex-row {
+    position: relative;
+    display: grid;
+    grid-template-columns: auto 1fr auto auto;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 1.5rem 0.5rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.09);
+    overflow: hidden;
+    /* Keeps the ::before wipe layered inside the row instead of falling behind
+       the page background. */
+    isolation: isolate;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.22, 0.8, 0.2, 1);
+}
+
+.pindex-row.is-in {
+    opacity: 1;
+    transform: none;
+}
+
+.pindex-row:last-child {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.09);
+}
+
+.pindex-row[hidden] {
+    display: none;
+}
+
+/* Wipes in from the leading edge on hover instead of a flat background swap. */
+.pindex-row::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    transform: scaleX(0);
+    transform-origin: left center;
+    background: linear-gradient(90deg, rgba(139, 92, 246, 0.16), rgba(6, 182, 212, 0.05) 70%, transparent);
+    transition: transform 0.55s cubic-bezier(0.22, 0.8, 0.2, 1);
+}
+
+html[dir="rtl"] .pindex-row::before {
+    transform-origin: right center;
+    background: linear-gradient(-90deg, rgba(139, 92, 246, 0.16), rgba(6, 182, 212, 0.05) 70%, transparent);
+}
+
+.pindex-row:hover::before {
+    transform: scaleX(1);
+}
+
+/* Everything except the hovered row steps back, so the list reads one line at a time. */
+.projects-index.is-hovering .pindex-row {
+    opacity: 0.32;
+    transition: opacity 0.4s ease;
+}
+
+.projects-index.is-hovering .pindex-row:hover {
+    opacity: 1;
+}
+
+.pindex-num {
+    font-size: 0.7rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    opacity: 0.4;
+    font-variant-numeric: tabular-nums;
+}
+
+.pindex-title {
+    font-size: clamp(1.6rem, 5.5vw, 3.4rem);
+    font-weight: 900;
+    line-height: 1.05;
+    letter-spacing: -0.035em;
+    text-transform: uppercase;
+    transition: transform 0.5s cubic-bezier(0.22, 0.8, 0.2, 1), color 0.35s ease;
+}
+
+.pindex-row:hover .pindex-title {
+    transform: translateX(0.75rem);
+}
+
+html[dir="rtl"] .pindex-row:hover .pindex-title {
+    transform: translateX(-0.75rem);
+}
+
+.pindex-meta {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    font-size: 0.62rem;
+    font-weight: 800;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    opacity: 0.45;
+}
+
+.pindex-stack {
+    display: none;
+}
+
+.pindex-cat {
+    padding: 0.3rem 0.75rem;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    white-space: nowrap;
+}
+
+.pindex-arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    flex: none;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    opacity: 0;
+    transform: translateX(-8px);
+    transition: opacity 0.4s ease, transform 0.45s cubic-bezier(0.22, 0.8, 0.2, 1),
+        background 0.3s ease, color 0.3s ease;
+}
+
+.pindex-arrow svg {
+    width: 16px;
+    height: 16px;
+}
+
+html[dir="rtl"] .pindex-arrow svg {
+    transform: scaleX(-1);
+}
+
+.pindex-row:hover .pindex-arrow {
+    opacity: 1;
+    transform: translateX(0);
+    background: #fff;
+    color: #050505;
+    border-color: #fff;
+}
+
+/* --- Cursor-following preview (index view, pointer devices only) --- */
+.hover-preview {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 39998;
+    width: 20rem;
+    aspect-ratio: 4 / 3;
+    border-radius: 18px;
+    overflow: hidden;
+    pointer-events: none;
+    opacity: 0;
+    transform: translate3d(-50%, -50%, 0) scale(0.85);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.55);
+    transition: opacity 0.35s ease;
+    will-change: transform;
+}
+
+.hover-preview.is-on {
+    opacity: 1;
+}
+
+.hover-preview img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+@media (hover: none), (pointer: coarse) {
+    .hover-preview {
+        display: none;
+    }
+}
+
+/* --- Grid --- */
+.projects-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    /* Dense keeps a filtered subset from leaving a gap mid-grid. */
+    grid-auto-flow: dense;
+    gap: 1.25rem;
+    padding: 0.5rem 6% 4rem;
+    max-width: var(--wrap);
+    margin: 0 auto;
+}
+
+.pcard {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    border-radius: 26px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.09);
+    background: linear-gradient(160deg, rgba(255, 255, 255, 0.055), rgba(255, 255, 255, 0.02));
+    opacity: 0;
+    transform: translateY(28px);
+    transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.22, 0.8, 0.2, 1),
+        border-color 0.35s ease, box-shadow 0.35s ease;
+}
+
+.pcard.is-in {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.pcard:hover {
+    border-color: rgba(255, 255, 255, 0.26);
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(139, 92, 246, 0.18);
+}
+
+.pcard[hidden] {
+    display: none;
+}
+
+/* A spotlight that tracks the pointer inside the card. --mx/--my are written
+   by projects.js from the pointer position. */
+.pcard::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    pointer-events: none;
+    opacity: 0;
+    background: radial-gradient(340px circle at var(--mx, 50%) var(--my, 0%),
+        rgba(139, 92, 246, 0.22), rgba(6, 182, 212, 0.08) 45%, transparent 70%);
+    transition: opacity 0.4s ease;
+}
+
+.pcard:hover::after {
+    opacity: 1;
+}
+
+.pcard-media {
+    position: relative;
+    display: block;
+    /* Matches the 2:1 shape of the source screenshots closely enough to avoid
+       cropping anything that matters. */
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: #0b0b0f;
+}
+
+.pcard-media img,
+.pcard-media video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top center;
+    opacity: 0.85;
+    transition: transform 0.8s cubic-bezier(0.22, 0.8, 0.2, 1), opacity 0.5s ease;
+}
+
+.pcard-media video {
+    opacity: 0;
+}
+
+.pcard:hover .pcard-media img {
+    transform: scale(1.06);
+    opacity: 1;
+}
+
+.pcard.is-playing .pcard-media video {
+    opacity: 1;
+}
+
+.pcard-media::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(5, 5, 5, 0.5) 0%, transparent 45%, rgba(5, 5, 5, 0.85) 100%);
+}
+
+.pcard-index,
+.pcard-cat {
+    position: absolute;
+    top: 1rem;
+    z-index: 2;
+    font-size: 0.62rem;
+    font-weight: 800;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+}
+
+.pcard-index {
+    inset-inline-start: 1.15rem;
+    font-size: 0.95rem;
+    letter-spacing: 0;
+    opacity: 0.7;
+    font-variant-numeric: tabular-nums;
+}
+
+.pcard-cat {
+    inset-inline-end: 1.15rem;
+    padding: 0.3rem 0.7rem;
+    border-radius: 999px;
+    background: rgba(5, 5, 5, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+}
+
+/* Hover affordance on the artwork itself, so the whole media area reads as a link. */
+.pcard-open {
+    position: absolute;
+    z-index: 2;
+    bottom: 1rem;
+    inset-inline-end: 1.15rem;
+    width: 38px;
+    height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    background: #fff;
+    color: #050505;
+    opacity: 0;
+    transform: translateY(8px) scale(0.9);
+    transition: opacity 0.35s ease, transform 0.35s cubic-bezier(0.22, 0.8, 0.2, 1);
+}
+
+.pcard-open svg {
+    width: 16px;
+    height: 16px;
+}
+
+html[dir="rtl"] .pcard-open svg {
+    transform: scaleX(-1);
+}
+
+.pcard:hover .pcard-open {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+}
+
+.pcard-body {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 1.35rem 1.35rem 1.5rem;
+    flex: 1;
+}
+
+.pcard-title {
+    font-size: 1.35rem;
+    font-weight: 900;
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+    text-transform: uppercase;
+}
+
+.pcard-tag {
+    font-size: 0.62rem;
+    font-weight: 800;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    opacity: 0.45;
+    margin-top: -0.55rem;
+}
+
+.pcard-blurb {
+    font-size: 0.95rem;
+    line-height: 1.7;
+    opacity: 0.62;
+}
+
+.pcard-stack {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-top: auto;
+    padding-top: 0.35rem;
+}
+
+.pcard-stack span {
+    font-size: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 0.28rem 0.6rem;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.07);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    opacity: 0.8;
+}
+
+.pcard-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    padding-top: 0.5rem;
+}
+
+.pcard-btn {
+    flex: 1 1 auto;
+    text-align: center;
+    border-radius: 999px;
+    padding: 0.62rem 1.1rem;
+    font-size: 0.66rem;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    background: #fff;
+    color: #050505;
+    border: 1px solid #fff;
+    transition: background 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+}
+
+.pcard-btn:hover {
+    background: var(--primary);
+    border-color: var(--primary);
+    color: #fff;
+}
+
+.pcard-btn.is-ghost {
+    background: transparent;
+    color: #fff;
+    border-color: rgba(255, 255, 255, 0.24);
+}
+
+.pcard-btn.is-ghost:hover {
+    background: rgba(255, 255, 255, 0.12);
+    border-color: rgba(255, 255, 255, 0.5);
+}
+
+.archive-empty {
+    text-align: center;
+    opacity: 0.5;
+    padding: 0 6% 4rem;
+}
+
+/* --- Closing CTA --- */
+.archive-cta {
+    padding: 3.5rem 6% 4rem;
+}
+
+.archive-cta-card {
+    position: relative;
+    overflow: hidden;
+    max-width: 46rem;
+    margin: 0 auto;
+    text-align: center;
+    padding: 2.5rem 1.75rem 2.75rem;
+    border-radius: 30px;
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    background: linear-gradient(155deg, rgba(255, 255, 255, 0.13), rgba(255, 255, 255, 0.03) 45%, rgba(139, 92, 246, 0.09));
+    backdrop-filter: blur(20px) saturate(150%);
+    -webkit-backdrop-filter: blur(20px) saturate(150%);
+    box-shadow: 0 28px 70px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.24);
+}
+
+.archive-cta-shine {
+    pointer-events: none;
+    position: absolute;
+    inset: -40% -20% auto;
+    height: 70%;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.2), transparent 70%);
+    transform: rotate(-8deg);
+    opacity: 0.5;
+}
+
+.archive-cta-title,
+.archive-cta-text,
+.archive-cta-btn {
+    position: relative;
+    z-index: 1;
+}
+
+.archive-cta-title {
+    font-size: clamp(1.6rem, 4vw, 2.8rem);
+    font-weight: 900;
+    letter-spacing: -0.03em;
+    line-height: 1.15;
+    text-transform: uppercase;
+}
+
+.archive-cta-text {
+    opacity: 0.6;
+    margin: 0.85rem auto 1.75rem;
+    max-width: 34rem;
+    line-height: 1.8;
+}
+
+.archive-cta-btn {
+    display: inline-block;
+    background: #fff;
+    color: #050505;
+    border-radius: 999px;
+    padding: 0.85rem 2rem;
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    border: 1px solid #fff;
+    transition: background 0.25s ease, color 0.25s ease, transform 0.25s ease;
+}
+
+.archive-cta-btn:hover {
+    background: var(--primary);
+    border-color: var(--primary);
+    color: #fff;
+    transform: translateY(-2px);
+}
+
+.archive-footer {
+    text-align: center;
+    padding: 2rem 6% 3rem;
+    font-size: 0.75rem;
+    opacity: 0.4;
+    border-top: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+@media (min-width: 768px) {
+    .projects-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 1.5rem;
+    }
+
+    .archive-head {
+        padding-top: 9.5rem;
+    }
+}
+
+@media (min-width: 1280px) {
+    .projects-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+
+@media (min-width: 1900px) {
+    .projects-grid {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    .pcard-body {
+        padding: 1.5rem 1.5rem 1.65rem;
+    }
+
+    .pcard-title {
+        font-size: 1.5rem;
+    }
+}
+
+/* --- Mobile --- */
+@media (max-width: 767px) {
+    .archive-nav {
+        padding: 1rem 5%;
+    }
+
+    .archive-head {
+        padding: 6.5rem 5% 1.75rem;
+    }
+
+    .archive-stats {
+        width: 100%;
+        padding: 1rem;
+        gap: 0.5rem 0;
+    }
+
+    .archive-stat {
+        flex: 1;
+        align-items: center;
+        text-align: center;
+        padding-inline: 0.5rem;
+    }
+
+    .archive-stat:first-child {
+        padding-inline-start: 0.5rem;
+    }
+
+    /* Label and layout switch share the top line, chips get their own row. */
+    .archive-filterbar {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        grid-template-areas:
+            "label toggle"
+            "chips chips";
+        align-items: center;
+        gap: 0.65rem 0.75rem;
+        padding: 0.75rem 5% 0.9rem;
+    }
+
+    .archive-filter-label {
+        grid-area: label;
+    }
+
+    .view-toggle {
+        grid-area: toggle;
+    }
+
+    /* Chips bleed to the screen edges so the row reads as swipeable. */
+    .archive-filters {
+        grid-area: chips;
+        margin-inline: -5%;
+        padding-inline: 5%;
+    }
+
+    .projects-index {
+        padding: 0.5rem 5% 2.5rem;
+    }
+
+    .pindex-row {
+        grid-template-columns: auto 1fr auto;
+        gap: 0.85rem;
+        padding: 1.15rem 0.25rem;
+    }
+
+    .pindex-title {
+        font-size: 1.45rem;
+    }
+
+    .pindex-meta {
+        gap: 0.5rem;
+        font-size: 0.55rem;
+    }
+
+    .pindex-cat {
+        padding: 0.25rem 0.55rem;
+    }
+
+    .pindex-arrow {
+        display: none;
+    }
+
+    .projects-grid {
+        padding: 0.5rem 5% 2.5rem;
+        gap: 1rem;
+    }
+
+    .pcard {
+        border-radius: 22px;
+    }
+
+    .pcard-body {
+        padding: 1.15rem 1.15rem 1.3rem;
+    }
+
+    .pcard-title {
+        font-size: 1.25rem;
+    }
+
+    .pcard-open {
+        opacity: 1;
+        transform: none;
+    }
+
+    .archive-cta {
+        padding: 2.5rem 5% 3rem;
+    }
+
+    .archive-cta-card {
+        padding: 1.9rem 1.25rem 2.1rem;
+        border-radius: 24px;
+    }
+}
+
+@media (min-width: 1024px) {
+    .pindex-stack {
+        display: inline;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .pcard,
+    .pindex-row {
+        opacity: 1;
+        transform: none;
+        transition: none;
+    }
+
+    .pindex-row::before,
+    .pindex-title,
+    .pindex-arrow {
+        transition: none;
+    }
+
+    .archive-title {
+        animation: none;
+        background-position: 0 center;
+    }
+
+    .archive-ghost {
+        display: none;
+    }
+}
+
+/* --- Arabic / RTL --- */
+html[dir="rtl"] .archive-title {
+    font-style: normal;
+    letter-spacing: 0;
+    text-transform: none;
+    font-weight: 800;
+    line-height: 1.25;
+}
+
+html[dir="rtl"] .archive-cta-title {
+    font-style: normal;
+    letter-spacing: 0;
+    text-transform: none;
+    font-weight: 800;
+    line-height: 1.35;
+}
+
+html[dir="rtl"] .archive-eyebrow,
+html[dir="rtl"] .archive-back,
+html[dir="rtl"] .archive-nav-links,
+html[dir="rtl"] .archive-filter-label,
+html[dir="rtl"] .archive-stat span,
+html[dir="rtl"] .archive-chip,
+html[dir="rtl"] .view-toggle button,
+html[dir="rtl"] .pcard-cat,
+html[dir="rtl"] .pcard-tag,
+html[dir="rtl"] .pcard-btn,
+html[dir="rtl"] .pindex-num,
+html[dir="rtl"] .pindex-cat,
+html[dir="rtl"] .archive-cta-btn {
+    letter-spacing: 0;
+    text-transform: none;
+    font-weight: 700;
+}
+
+html[dir="rtl"] .archive-ghost {
+    inset-inline-start: auto;
+    inset-inline-end: -2vw;
+}
+
+html[dir="rtl"] .archive-lead,
+html[dir="rtl"] .pcard-blurb,
+html[dir="rtl"] .archive-cta-text {
+    line-height: 1.9;
+}
+
+/* Project names and tech chips stay latin; isolating them keeps the bidi
+   algorithm from reordering the words while the line still aligns to the right. */
+html[dir="rtl"] .pcard-title,
+html[dir="rtl"] .pcard-tag,
+html[dir="rtl"] .pcard-stack span,
+html[dir="rtl"] .pindex-title,
+html[dir="rtl"] .pindex-stack {
+    unicode-bidi: isolate;
+}
+
+html[dir="rtl"] .pcard-title,
+html[dir="rtl"] .pindex-title {
+    font-family: 'Outfit', sans-serif;
+}
