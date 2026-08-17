@@ -125,6 +125,11 @@
     padding: 8rem 6% 2.5rem;
     max-width: var(--wrap);
     margin: 0 auto;
+    /* The ghost word is wider than the viewport by design; without clipping it
+       makes the whole page pannable sideways, which drags the fixed nav's right
+       side out of view on a phone. clip avoids creating a scroll container. */
+    overflow-x: hidden;
+    overflow-x: clip;
 }
 
 /* Outlined ghost word behind the heading — drifts sideways on scroll. */
@@ -1074,6 +1079,11 @@ html[dir="rtl"] .pcard-open svg {
     .pcard-open {
         opacity: 1;
         transform: none;
+    }
+
+    /* Clears the floating bottom nav. */
+    .archive-footer {
+        padding: 1.75rem 5% calc(7rem + env(safe-area-inset-bottom, 0px));
     }
 }
 
