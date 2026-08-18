@@ -128,8 +128,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const card = document.createElement('article');
         card.className = 'pcard';
         card.dataset.category = project.category;
+        card.dataset.project = project.key;
 
-        const caseUrl = 'index.html?project=' + encodeURIComponent(project.key);
+        const caseUrl = '?project=' + encodeURIComponent(project.key);
         const hasLive = project.link && project.link !== '#';
 
         const media = document.createElement('a');
@@ -181,7 +182,8 @@ document.addEventListener('DOMContentLoaded', () => {
         row.className = 'pindex-row';
         row.dataset.category = project.category;
         row.dataset.cover = project.cover;
-        row.href = 'index.html?project=' + encodeURIComponent(project.key);
+        row.dataset.project = project.key;
+        row.href = '?project=' + encodeURIComponent(project.key);
         row.innerHTML = `
             <span class="pindex-num">${pad(index + 1)}</span>
             <span class="pindex-thumb" aria-hidden="true">
@@ -316,6 +318,45 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     window.applyLang(window.getLang());
+    window.initProjectDetail();
+
+    const projectCover = (key) => {
+        const found = ARCHIVE_PROJECTS.find((p) => p.key === key);
+        return found ? found.cover : '';
+    };
+
+    const openArchiveProject = (key, fallbackSrc) => {
+        const title = String(key || '').trim().toUpperCase();
+        const data = (window.PROJECT_DATA && window.PROJECT_DATA[title]) || null;
+        if (!data || typeof window.openProjectDetail !== 'function') return false;
+        window.openProjectDetail(title, data, fallbackSrc || projectCover(title));
+        return true;
+    };
+
+    const bindCaseStudyLinks = () => {
+        document.querySelectorAll('.pcard-media, .pcard-btn:not(.is-ghost), .pindex-row').forEach((el) => {
+            if (el.dataset.caseBound === '1') return;
+            el.dataset.caseBound = '1';
+            el.addEventListener('click', (e) => {
+                if (el.classList.contains('is-ghost')) return;
+                const card = el.closest('[data-project]');
+                const key = card && card.dataset.project;
+                if (!key) return;
+                e.preventDefault();
+                const cover = card.dataset.cover || (card.querySelector('img') && card.querySelector('img').src) || projectCover(key);
+                openArchiveProject(key, cover);
+            });
+        });
+    };
+
+    bindCaseStudyLinks();
+
+    (function openProjectFromQuery() {
+        const requested = new URLSearchParams(location.search).get('project');
+        if (!requested) return;
+        const key = requested.trim().toUpperCase();
+        requestAnimationFrame(() => openArchiveProject(key, projectCover(key)));
+    })();
 
     // --- Grid / Index layout switch ---
     (function initViewToggle() {

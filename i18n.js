@@ -1,6 +1,6 @@
 window.I18N = {
     en: {
-        'meta.title': 'Abdelrhman Khaled | Frontend Developer 2026',
+        'meta.title': 'Abdelrhman Khaled | Frontend Developer & UI Specialist',
         'meta.projects': 'All Projects | Abdelrhman Khaled',
         'nav.home': 'Home',
         'nav.work': 'Work',

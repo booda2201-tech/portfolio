@@ -188,6 +188,64 @@
         <p data-i18n="footer.copy">© 2026 Abdelrhman Khaled. Built with passion &amp; modern tech.</p>
     </footer>
 
+    <div id="projectDetail" data-lenis-prevent class="fixed inset-0 z-[30000] bg-dark translate-y-full transition-transform duration-700 ease-[cubic-bezier(0.85,0,0.15,1)] flex flex-col overflow-y-auto overscroll-contain">
+        <button id="closeDetail" class="fixed top-4 end-4 md:top-8 md:end-8 z-[30001] w-10 h-10 md:w-12 md:h-12 rounded-full bg-white text-dark flex items-center justify-center hover:scale-110 transition-transform cursor-pointer shadow-xl" aria-label="Close">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 md:h-6 md:w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+        </button>
+
+        <div class="w-full max-w-6xl mx-auto px-4 md:px-8 pt-20 md:pt-24 pb-16">
+            <div class="mb-8 md:mb-10">
+                <p id="detailTag" class="text-primary text-[10px] md:text-xs font-bold tracking-[0.25em] uppercase mb-3">Category</p>
+                <h2 id="detailTitle" class="text-3xl md:text-6xl lg:text-7xl font-black italic tracking-tighter">PROJECT TITLE</h2>
+            </div>
+
+            <div class="relative w-full aspect-video md:aspect-[16/9] bg-white/5 border border-white/10 rounded-2xl md:rounded-3xl overflow-hidden mb-4">
+                <img id="detailImg" src="" alt="Project Image" class="w-full h-full object-contain bg-[#0a0a0a]">
+                <video id="detailVideo" class="w-full h-full object-contain bg-[#0a0a0a] hidden" src="" controls playsinline muted></video>
+                <button id="detailPrev" type="button" class="absolute left-3 md:left-5 top-1/2 -translate-y-1/2 w-10 h-10 md:w-12 md:h-12 rounded-full bg-black/70 border border-white/20 text-white flex items-center justify-center hover:bg-primary hover:border-primary transition-all cursor-pointer" aria-label="Previous image">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
+                </button>
+                <button id="detailNext" type="button" class="absolute right-3 md:right-5 top-1/2 -translate-y-1/2 w-10 h-10 md:w-12 md:h-12 rounded-full bg-black/70 border border-white/20 text-white flex items-center justify-center hover:bg-primary hover:border-primary transition-all cursor-pointer" aria-label="Next image">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
+                </button>
+                <div id="detailCounter" class="absolute bottom-3 end-3 md:bottom-4 md:end-4 px-3 py-1 rounded-full bg-black/70 border border-white/10 text-[10px] md:text-xs font-mono tracking-widest">1 / 1</div>
+            </div>
+
+            <div id="detailThumbs" class="flex gap-2 md:gap-3 overflow-x-auto pb-2 mb-10 md:mb-14 scrollbar-hide"></div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-14">
+                <div class="order-2 md:order-1 md:col-span-2 space-y-10 md:space-y-12">
+                    <div class="detail-reveal">
+                        <h3 class="text-[10px] uppercase tracking-widest opacity-40 mb-4" data-i18n="detail.case">Case Study</h3>
+                        <p id="detailDesc" class="text-base md:text-xl opacity-80 leading-relaxed">
+                            Detailed project description goes here...
+                        </p>
+                    </div>
+                    <div class="detail-reveal">
+                        <h3 class="text-[10px] uppercase tracking-widest opacity-40 mb-5" data-i18n="detail.features">Key Features</h3>
+                        <ul id="detailFeatures" class="detail-points"></ul>
+                    </div>
+                    <div class="detail-reveal">
+                        <h3 class="text-[10px] uppercase tracking-widest opacity-40 mb-5" data-i18n="detail.ideas">New Ideas</h3>
+                        <ul id="detailIdeas" class="detail-points"></ul>
+                    </div>
+                </div>
+                <div class="order-1 md:order-2 space-y-8">
+                    <div class="detail-reveal">
+                        <h3 class="text-[10px] uppercase tracking-widest opacity-40 mb-4" data-i18n="detail.skills">Skills Used</h3>
+                        <div id="detailStack" class="flex flex-wrap gap-2"></div>
+                    </div>
+                    <div id="detailActions" class="detail-reveal">
+                        <h3 class="text-[10px] uppercase tracking-widest opacity-40 mb-4" data-i18n="detail.actions">Actions</h3>
+                        <a id="detailLink" href="#" target="_blank" rel="noopener noreferrer" class="btn-primary bg-white text-dark px-6 py-3 md:px-8 rounded-full font-bold inline-block hover:bg-primary hover:text-white transition-all w-full text-center" data-i18n="detail.live">Live Site</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <button id="backToTop" class="hidden md:flex fixed bottom-5 end-5 md:bottom-8 md:end-8 w-12 h-12 rounded-full bg-white text-dark items-center justify-center shadow-2xl opacity-0 translate-y-10 transition-all duration-500 z-[9998] hover:scale-110 active:scale-95 group cursor-pointer" aria-label="Back to top">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 group-hover:-translate-y-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18" />
@@ -198,6 +256,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/Flip.min.js"></script>
     <script src="i18n.js?v=7"></script>
-    <script src="projects.js?v=11"></script>
+    <script src="project-data.js?v=1"></script>
+    <script src="project-detail.js?v=1"></script>
+    <script src="projects.js?v=12"></script>
 </body>
 </html>
