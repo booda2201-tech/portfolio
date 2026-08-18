@@ -19,7 +19,7 @@ const ARCHIVE_PROJECTS = [
         tag: 'Real-time Auction System',
         blurb: 'proj.rebhny',
         category: 'realtime',
-        cover: 'assets/imges/r1.png',
+        cover: 'assets/imges/rebhny-1.png',
         stack: ['Angular', 'Socket.io', 'Node.js', 'Express'],
         link: '#'
     },

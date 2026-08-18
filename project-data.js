@@ -90,10 +90,13 @@ window.PROJECT_DATA = {
         link: "#",
         tag: "Rebhny - Real-time Auction System",
         images: [
-            "assets/imges/r1.png",
-            "assets/imges/r2.png",
-            "assets/imges/r3.png",
-            "assets/imges/r4.png"
+            "assets/imges/rebhny-1.png",
+            "assets/imges/rebhny-2.png",
+            "assets/imges/rebhny-3.png",
+            "assets/imges/rebhny-4.png",
+            "assets/imges/rebhny-5.png",
+            "assets/imges/rebhny-6.png",
+            "assets/imges/rebhny-7.png"
         ]
     },
     "FORTNO": {
