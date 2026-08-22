@@ -65,16 +65,6 @@ const ARCHIVE_PROJECTS = [
         link: 'https://moonlight.sa'
     },
     {
-        key: 'FORTNO',
-        title: 'FORTNO',
-        tag: 'Fortno Car Care',
-        blurb: 'proj.fortno',
-        category: 'corporate',
-        cover: 'assets/imges/f1.png',
-        stack: ['Angular', 'TypeScript', 'GSAP', 'Tailwind CSS'],
-        link: '#'
-    },
-    {
         key: 'GULF FOOD',
         title: 'GULF FOOD',
         tag: 'Gulf Food Factory',

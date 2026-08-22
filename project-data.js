@@ -99,42 +99,6 @@ window.PROJECT_DATA = {
             "assets/imges/rebhny-7.png"
         ]
     },
-    "FORTNO": {
-        desc: "واجهة رقمية فاخرة لعلامة \"فورتو\" للعناية بالسيارات، تتميز بهوية \"شياكة\" العربية مع تجربة مستخدم تفاعلية وراقية تعكس جودة الخدمات المقدمة.",
-        descEn: "A luxury digital face for Fortno car care, mixing Arabic elegance with a refined interactive experience.",
-        stack: ["Angular", "TypeScript", "Tailwind CSS", "GSAP"],
-        features: [
-            "واجهة فاخرة تعكس جودة خدمات العناية بالسيارات",
-            "دمج هوية \"شياكة\" العربية داخل تصميم ويب عصري",
-            "معرض صور عالي الدقة للنتائج والخدمات",
-            "تجربة متجاوبة كاملة للجوال والديسكتوب"
-        ],
-        featuresEn: [
-            "A luxury interface that matches the quality of the service",
-            "Arabic brand identity inside a modern web layout",
-            "A high-resolution gallery for results and services",
-            "A fully responsive experience on phone and desktop"
-        ],
-        ideas: [
-            "ترجمة الفخامة العربية إلى لغة ويب حديثة بدون فقدان الهوية",
-            "تجربة بصرية cinematic تقنع بالجودة قبل الحجز",
-            "تحسين تحميل الأصول لمعارض الصور عالية الدقة"
-        ],
-        ideasEn: [
-            "Translate Arabic luxury into a modern web language",
-            "A cinematic first impression before the booking",
-            "Careful loading for large photo galleries"
-        ],
-        link: "#",
-        tag: "Fortno Car Care",
-        images: [
-            "assets/imges/f1.png",
-            "assets/imges/f2.png",
-            "assets/imges/f3.png",
-            "assets/imges/f4.png",
-            "assets/imges/f5.png"
-        ]
-    },
     "AL HENDAL": {
         desc: "الموقع الرسمي لمجموعة \"الهندال\" القابضة، يدعم اللغتين العربية والإنجليزية (RTL/LTR) مع بنية برمجية متطورة للترجمة وتأثيرات حركية متقدمة باستخدام GSAP.",
         descEn: "The official site for Al Hendal Holding, with full Arabic/English RTL-LTR support and GSAP motion.",
