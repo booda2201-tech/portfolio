@@ -3,7 +3,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "favicon": "node generate-favicon.js"
+    "favicon": "node generate-favicon.js",
+    "build": "echo static"
   },
   "devDependencies": {
     "sharp": "^0.34.5"
