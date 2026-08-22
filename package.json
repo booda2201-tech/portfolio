@@ -1,0 +1,11 @@
+{
+  "name": "abdelrhman-khaled-portfolio",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "favicon": "node generate-favicon.js"
+  },
+  "devDependencies": {
+    "sharp": "^0.34.5"
+  }
+}
