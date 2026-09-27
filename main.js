@@ -127,6 +127,15 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // Dim the cosmos while the project carousel is on screen so the work stays the focus.
+    const spaceStage = document.querySelector('#spaceStage');
+    const workSection = document.querySelector('#work');
+    if (spaceStage && workSection && 'IntersectionObserver' in window) {
+        new IntersectionObserver(([entry]) => {
+            spaceStage.classList.toggle('is-dimmed', entry.isIntersecting);
+        }, { threshold: isSmallScreen ? 0.25 : 0.35 }).observe(workSection);
+    }
+
     // 3. Main Animations
     function initMainAnimations() {
         if (!isSmallScreen && typeof AOS !== 'undefined') {

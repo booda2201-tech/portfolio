@@ -653,9 +653,8 @@
 
             self.mount.classList.add('is-ready');
             if (typeof gsap !== 'undefined' && !self.reduceMotion) {
-                gsap.fromTo(self.mount, { opacity: 0 }, { opacity: 1, duration: 1.5, ease: 'power2.out' });
-            } else {
-                self.mount.style.opacity = '1';
+                // Inline opacity is dropped afterwards so CSS states like .is-dimmed can take over.
+                gsap.fromTo(self.mount, { opacity: 0 }, { opacity: 1, duration: 1.5, ease: 'power2.out', clearProps: 'opacity' });
             }
 
             self.clock = new THREE.Clock();
@@ -821,8 +820,10 @@
 
         if (index === 0) {
             const r = SUN_RADIUS * s;
-            out.pos.set(r * 3.2, r * 2.2, r * 7.5);
-            out.look.set(0, 0, 0);
+            // Portrait screens are narrow, so pull back until the sun sits under the hero text instead of filling it.
+            const k = this.camera.aspect < 1 ? 2.4 : 1;
+            out.pos.set(r * 3.2 * k, r * 2.2 * k, r * 7.5 * k);
+            out.look.set(0, k > 1 ? r * 6.2 : 0, 0);
             return;
         }
 
