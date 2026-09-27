@@ -1085,6 +1085,22 @@ html[dir="rtl"] .pcard-open svg {
     .archive-footer {
         padding: 1.75rem 5% calc(7rem + env(safe-area-inset-bottom, 0px));
     }
+
+    /* Blurring the live space canvas every frame is what drops phone frames. */
+    .archive-stats,
+    .archive-filterbar::before,
+    .pcard-cat {
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+    }
+
+    .archive-stats {
+        background: rgba(12, 12, 18, 0.78);
+    }
+
+    .archive-filterbar::before {
+        background: rgba(5, 5, 8, 0.86);
+    }
 }
 
 @media (min-width: 1024px) {
@@ -1166,4 +1182,30 @@ html[dir="rtl"] .pindex-stack {
 html[dir="rtl"] .pcard-title,
 html[dir="rtl"] .pindex-title {
     font-family: 'Outfit', sans-serif;
+}
+
+/* Solar-system backdrop — keep archive content readable but translucent. */
+@media (min-width: 768px) {
+    body {
+        background-color: #03040a !important;
+    }
+
+    .archive-head,
+    .archive-filterbar {
+        background: linear-gradient(
+            to bottom,
+            rgba(3, 4, 10, 0.35),
+            rgba(3, 4, 10, 0.2)
+        );
+    }
+
+    .archive-footer {
+        background: rgba(3, 4, 10, 0.55);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+    }
+
+    .float-field {
+        display: none;
+    }
 }

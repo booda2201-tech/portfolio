@@ -118,135 +118,14 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
 
-    // 2. Three.js Advanced Scene (Atmosphere + Glass Shapes)
-    let scene, camera, renderer, cloudParticles = [], floatingShapes = [], flash;
-    
-    function initThree() {
-        scene = new THREE.Scene();
-        camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 1000);
-        camera.position.z = 1;
-        camera.rotation.x = 1.16;
-        camera.rotation.y = -0.12;
-        camera.rotation.z = 0.27;
-
-        let ambient = new THREE.AmbientLight(0x555555);
-        scene.add(ambient);
-
-        let directionalLight = new THREE.DirectionalLight(0xffffff);
-        directionalLight.position.set(0,0,1);
-        scene.add(directionalLight);
-
-        renderer = new THREE.WebGLRenderer({ antialias: !isSmallScreen, alpha: true, powerPreference: 'low-power' });
-        renderer.setPixelRatio(Math.min(window.devicePixelRatio, isSmallScreen ? 1 : 2));
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        scene.fog = new THREE.FogExp2(0x050505, 0.002);
-        document.body.appendChild(renderer.domElement);
-        renderer.domElement.style.position = 'fixed';
-        renderer.domElement.style.top = '0';
-        renderer.domElement.style.left = '0';
-        renderer.domElement.style.zIndex = '-2';
-        renderer.domElement.style.pointerEvents = 'none';
-
-        // Add Clouds
-        let loader = new THREE.TextureLoader();
-        loader.load("https://raw.githubusercontent.com/pankaj-sharma/threejs-smoke-lightning-effect/master/smoke.png", function(texture){
-            const cloudGeo = new THREE.PlaneBufferGeometry(500,500);
-            const cloudMaterial = new THREE.MeshLambertMaterial({ map: texture, transparent: true });
-
-            const cloudCount = isSmallScreen ? 8 : 25;
-            for(let p=0; p<cloudCount; p++) {
-                let cloud = new THREE.Mesh(cloudGeo,cloudMaterial);
-                cloud.position.set(Math.random()*800 -400, 500, Math.random()*500 - 450);
-                cloud.rotation.x = 1.16;
-                cloud.rotation.y = -0.12;
-                cloud.rotation.z = Math.random()*360;
-                cloud.material.opacity = 0.6;
-                cloudParticles.push(cloud);
-                scene.add(cloud);
-            }
+    // 2. Solar-system space journey (desktop) — shared space.js module
+    if (typeof window.initSpaceJourney === 'function') {
+        window.__spaceJourney = window.initSpaceJourney({
+            mount: document.querySelector('#spaceStage'),
+            trigger: document.documentElement,
+            force: isSmallScreen
         });
-
-        // Add Floating Glass Shapes
-        const geometries = [
-            new THREE.TorusGeometry(10, 2.4, 16, 64),
-            new THREE.TorusGeometry(8, 1.6, 12, 48),
-            new THREE.SphereGeometry(5.5, 24, 24),
-            new THREE.IcosahedronGeometry(9, 0),
-            new THREE.OctahedronGeometry(9, 0),
-            new THREE.TetrahedronGeometry(9, 0),
-            new THREE.TorusKnotGeometry(7.5, 2.1, 80, 12),
-            new THREE.RingGeometry(6, 10, 48)
-        ];
-
-        const shapeCount = 16;
-        for (let i = 0; i < shapeCount; i++) {
-            const geo = geometries[i % geometries.length];
-            const wireframe = i % 4 === 0;
-            const mat = new THREE.MeshPhongMaterial({
-                color: 0xffffff,
-                transparent: true,
-                opacity: wireframe ? 0.18 : 0.1,
-                shininess: 120,
-                specular: 0xffffff,
-                wireframe,
-                side: THREE.DoubleSide
-            });
-            const shape = new THREE.Mesh(geo, mat);
-            const scale = 0.45 + Math.random() * 1.7;
-            shape.scale.setScalar(scale);
-            shape.position.set(
-                (Math.random() - 0.5) * 380,
-                Math.random() * 260 - 30,
-                (Math.random() - 0.5) * 340 - 40
-            );
-            shape.rotation.set(Math.random() * Math.PI, Math.random() * Math.PI, Math.random() * Math.PI);
-            floatingShapes.push({
-                mesh: shape,
-                rotX: 0.006 + Math.random() * 0.014,
-                rotY: 0.005 + Math.random() * 0.012,
-                phase: Math.random() * Math.PI * 2,
-                ampY: 10 + Math.random() * 22,
-                ampX: 6 + Math.random() * 16,
-                baseX: shape.position.x,
-                baseY: shape.position.y
-            });
-            scene.add(shape);
-        }
-
-        animateThree();
     }
-
-    function animateThree() {
-        requestAnimationFrame(animateThree);
-        if (document.hidden) return;
-        cloudParticles.forEach(p => { p.rotation.z -=0.002; });
-        floatingShapes.forEach(s => {
-            s.mesh.rotation.x += s.rotX;
-            s.mesh.rotation.y += s.rotY;
-            const t = Date.now() * 0.001;
-            s.mesh.position.y = s.baseY + Math.sin(t * 0.9 + s.phase) * s.ampY;
-            s.mesh.position.x = s.baseX + Math.cos(t * 0.55 + s.phase) * s.ampX;
-        });
-        renderer.render(scene, camera);
-    }
-
-    // A second WebGL canvas behind a CSS gradient buys almost nothing on a phone
-    // but costs a constant render loop, so phones get the CSS aurora only.
-    if (!isSmallScreen) {
-        initThree();
-    }
-
-    // Keep the WebGL canvas matched to the viewport (mobile rotation / chrome resize)
-    let threeResizeTimer;
-    window.addEventListener('resize', () => {
-        clearTimeout(threeResizeTimer);
-        threeResizeTimer = setTimeout(() => {
-            if (!renderer || !camera) return;
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
-        }, 200);
-    });
 
     // 3. Main Animations
     function initMainAnimations() {
@@ -364,6 +243,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const follower = document.querySelector('.cursor-follower');
     const cursorText = document.querySelector('.cursor-text');
 
+    const floatingShapes = [];
     if (!isTouch && cursor && follower) {
         gsap.set([cursor, follower], { xPercent: -50, yPercent: -50 });
 

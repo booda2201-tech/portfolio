@@ -100,6 +100,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (hasGsap && typeof ScrollTrigger !== 'undefined') gsap.registerPlugin(ScrollTrigger);
 
+    const isSmallScreen = window.__IS_MOBILE__ || window.matchMedia('(max-width: 767px)').matches;
+    if (typeof window.initSpaceJourney === 'function') {
+        window.__spaceJourney = window.initSpaceJourney({
+            mount: document.querySelector('#spaceStage'),
+            trigger: document.documentElement,
+            force: isSmallScreen
+        });
+    }
+
     const pad = (n) => String(n).padStart(2, '0');
     const countEl = document.querySelector('#archiveCount');
     const liveEl = document.querySelector('#archiveLive');
