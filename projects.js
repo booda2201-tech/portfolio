@@ -3,6 +3,26 @@
 
 const ARCHIVE_PROJECTS = [
     {
+        key: 'ARIN',
+        title: 'ARIN',
+        tag: 'Trade & Sourcing',
+        blurb: 'proj.arin',
+        category: 'corporate',
+        cover: 'Arin/1.webp',
+        stack: ['Angular', 'TypeScript', 'Tailwind CSS'],
+        link: 'https://arinn-web.vercel.app/'
+    },
+    {
+        key: 'AL MONBAT',
+        title: 'AL MONBAT',
+        tag: 'Olive & Pantry Store',
+        blurb: 'proj.monbat',
+        category: 'ecom',
+        cover: 'Monbat/1.webp',
+        stack: ['Angular', 'TypeScript', 'RxJS', 'Tailwind CSS'],
+        link: 'https://almanbat.vercel.app/'
+    },
+    {
         key: 'T4T STORE',
         title: 'T4T STORE',
         tag: 'T4T — Tea E-commerce',
@@ -39,7 +59,7 @@ const ARCHIVE_PROJECTS = [
         tag: 'Alamana Building Materials',
         blurb: 'proj.alamana',
         category: 'ecom',
-        cover: 'assets/imges/am1.jpg',
+        cover: 'Alamana/1.webp',
         stack: ['Angular', 'TypeScript', 'Bootstrap', 'Tailwind CSS'],
         link: 'https://alamanamarket.com/'
     },

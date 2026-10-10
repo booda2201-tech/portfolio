@@ -14,10 +14,107 @@ window.SKILL_ICONS = {
     'Three.js': { slug: 'threedotjs', color: '000000' },
     'Firebase': { slug: 'firebase', color: 'ffca28' },
     'Bootstrap': { slug: 'bootstrap', color: '7952b3' },
-    'AOS': { slug: 'css3', color: '1572b6' }
+    'AOS': { slug: 'css3', color: '1572b6' },
+    'RxJS': { slug: 'reactivex', color: 'b7178c' },
+    'SCSS': { slug: 'sass', color: 'cc6699' },
+    'JWT': { slug: 'jsonwebtokens', color: '000000' },
+    'Vercel': { slug: 'vercel', color: '000000' }
 };
 
 window.PROJECT_DATA = {
+    "ARIN": {
+        desc: "الموقع الرسمي لشركة «عرين الموارد التجارية» — شريك توريد وتجارة خارجية من مصر، يقدّم الاستيراد والتصدير والشحن الدولي والتوكيلات التجارية وحلول سلاسل الإمداد والاستشارات. واجهة مؤسسية فاخرة بالأسود والذهبي، عربية أولًا (RTL) مع نسخة إنجليزية كاملة.",
+        descEn: "The corporate site for Arin Almawared — an Egyptian sourcing and foreign-trade partner covering import/export, international shipping, trade agencies, supply-chain solutions and consulting. A premium black-and-gold interface, Arabic first (RTL) with a full English version.",
+        stack: ["Angular", "TypeScript", "Tailwind CSS", "Vercel"],
+        features: [
+            "طلب عرض سعر في أربع خطوات قصيرة (الاحتياج، الشحن، التواصل، المراجعة) باختيار الخدمة والمنتج والكمية التقديرية والوجهة",
+            "دليل منتجات بتصنيفات (أغذية، عناية شخصية، تعبئة وتغليف، توابل، زيوت) يعرض بلد المنشأ والتعبئة لكل صنف، مع طلب عرض سعر مباشر من كل منتج",
+            "صفحة خدمات بأقسام مستقلة لكل خدمة يوصل لها الفوتر مباشرة، وصفحة قدرات تشرح نوع العمليات: شحن بحري وبري وتخزين وتوكيلات وعلامات خاصة",
+            "تبديل كامل بين العربية والإنجليزية مع قلب اتجاه الصفحة، وبوابة تسجيل دخول للنظام الداخلي"
+        ],
+        featuresEn: [
+            "A four-step quote request (need, shipping, contact, review) with service, product, estimated quantity and destination",
+            "A categorized product guide (food, personal care, packaging, spices, oils) showing origin and packaging, with a quote request from every product",
+            "A services page with a section per service linked straight from the footer, plus a capabilities page for sea and land freight, warehousing, agencies and private label",
+            "Full Arabic/English switching with direction flip, and a login portal for the internal system"
+        ],
+        ideas: [
+            "لا أسعار على الموقع — كل الطرق تؤدي لعرض توريد مخصص بدل كتالوج أسعار ثابت",
+            "هوية مؤسسية بالأسود والذهبي توحي بالثقة والحجم بدل قوالب شركات الشحن المعتادة",
+            "معالج طلب قصير يجمع بيانات كافية للتسعير من غير ما يرهق العميل"
+        ],
+        ideasEn: [
+            "No prices on the site — every path leads to a tailored supply quote instead of a fixed price list",
+            "A black-and-gold corporate identity that signals trust and scale instead of a generic logistics template",
+            "A short wizard that gathers enough to price an order without wearing the client out"
+        ],
+        link: "https://arinn-web.vercel.app/",
+        tag: "Arin Almawared — Trade & Sourcing",
+        images: [
+            "Arin/1.webp",
+            "Arin/2.webp",
+            "Arin/3.webp",
+            "Arin/4.webp",
+            "Arin/5.webp",
+            "Arin/6.webp",
+            "Arin/7.webp",
+            "Arin/8.webp",
+            "Arin/9.webp",
+            "Arin/10.webp",
+            "Arin/11.webp",
+            "Arin/12.webp",
+            "Arin/13.webp"
+        ]
+    },
+    "AL MONBAT": {
+        desc: "«المُنبَت — سر الخير» متجر إلكتروني عربي لمنتجات الزيتون والمونة المصرية، واجهته مربوطة بخادم خلفي حقيقي، وفيه حساب للعميل ولوحة إدارة كاملة. يبيع زيوت الزيتون والزيتون والمخللات ودفعات موسم الحصاد بالجنيه المصري، والتجربة عربية أولًا (RTL) مع نسخة إنجليزية كاملة.",
+        descEn: "Al Monbat — “Sir El Kheir” is an Arabic-first store for Egyptian olive and pantry products, wired to a real backend API with a customer account and a full admin dashboard. It sells olive oils, olives, pickles and harvest-season batches in EGP, starting in Arabic (RTL) with a complete English version.",
+        stack: ["Angular", "TypeScript", "RxJS", "JWT", "Tailwind CSS", "SCSS", "GSAP", "Vercel"],
+        features: [
+            "رحلة شراء كاملة: رئيسية ببانر وعروض بعداد تنازلي، تصفح بفلاتر وترتيب وترقيم، صفحة منتج بمعرض وتقييمات، سلة في درج جانبي، مفضلة، ومقارنة حتى ٤ منتجات",
+            "دفع بعنوان ونقدًا أو بطاقة مع أكواد خصم وشحن مجاني فوق ٢٥٠ جنيه، ثم تأكيد الطلب وتتبعه",
+            "حساب للعميل: نظرة عامة، الطلبات، العناوين، وتغيير كلمة المرور",
+            "لوحة إدارة منفصلة: CRUD للمنتجات والفئات بصور ونصوص عربي/إنجليزي، متابعة الطلبات وتغيير حالتها، وإدارة العروض",
+            "مساعد داخل نموذج المنتج يقرأ الاسم العربي ويقترح وصفًا إنجليزيًا وحقول الصنف والحصاد والحموضة، ويفهم أصناف مثل كوراتينا وأربيكينا وبيكوال",
+            "رفع صور بضغط تلقائي في المتصفح تحت ٥ ميجابايت مع الحفاظ على الشفافية"
+        ],
+        featuresEn: [
+            "The full buying journey: animated hero, countdown offers, filtered and paginated browsing, product gallery with reviews, a cart drawer, wishlist, and side-by-side compare for up to four products",
+            "Checkout with address, cash or card, discount codes and free shipping over EGP 250, followed by order confirmation and tracking",
+            "A customer account with overview, orders, addresses and password change",
+            "A separate admin dashboard: product and category CRUD with images and Arabic/English copy, order status management, and offers",
+            "A product-form assistant that reads the Arabic name and suggests English copy plus variety, harvest and acidity fields — it knows Coratina, Arbequina and Picual",
+            "Image uploads compressed in the browser under 5 MB, keeping transparency when needed"
+        ],
+        ideas: [
+            "متجر كامل وليس واجهة عرض: الكتالوج والسلة والمفضلة والدفع والحساب والإدارة كلها مربوطة بالخادم، والحالة تتحمّل قبل ما المستخدم يشوف الصفحة",
+            "عربي أولًا وإنجليزي جاهز: تبديل اللغة يغيّر اتجاه الصفحة ولغتها ويبعت اللغة مع كل طلب (Accept-Language ومعامل lang)",
+            "فصل واضح بين العميل والمشرف بحراس مسارات، وانتهاء التوكن يرجّع المستخدم لتسجيل الدخول مع حفظ الصفحة اللي كان فيها",
+            "طبقة تحويل دفاعية تتحمّل اختلاف شكل ردود الخادم وتتجاهل الأجزاء الاختيارية لو فشلت بدل ما الصفحة كلها تقع"
+        ],
+        ideasEn: [
+            "A real store, not a showcase: catalog, cart, wishlist, checkout, account and admin all talk to the API, with state loaded before the first paint",
+            "Arabic first, English ready: switching language flips direction and lang, and sends the language with every request (Accept-Language and a lang param)",
+            "Clear customer/admin separation through route guards; an expired token clears the session and returns to login with the original page saved",
+            "A defensive mapping layer that tolerates different response shapes and skips optional endpoints that fail instead of breaking the page"
+        ],
+        link: "https://almanbat.vercel.app/",
+        tag: "Al Monbat — Olive & Pantry Store",
+        images: [
+            "Monbat/1.webp",
+            "Monbat/2.webp",
+            "Monbat/3.webp",
+            "Monbat/4.webp",
+            "Monbat/5.webp",
+            "Monbat/6.webp",
+            "Monbat/7.webp",
+            "Monbat/8.webp",
+            "Monbat/9.webp",
+            "Monbat/10.webp",
+            "Monbat/11.webp",
+            "Monbat/12.webp"
+        ]
+    },
     "T4T STORE": {
         desc: "منصة متكاملة لبراند \"تي فور تي\" لاستعراض وبيع منتجات الشاي الفاخرة، تتميز بنظام سلة تسوق ذكي، وتتبع مباشر لحالة الطلبات والتوصيل.",
         descEn: "A complete store for the T4T tea brand, with a smart cart and live tracking from checkout to delivery.",
@@ -234,10 +331,13 @@ window.PROJECT_DATA = {
         link: "https://alamanamarket.com/",
         tag: "Alamana Building Materials",
         images: [
-            "assets/imges/am1.jpg",
-            "assets/imges/am2.jpg",
-            "assets/imges/am3.jpg",
-            "assets/imges/am4.jpg"
+            "Alamana/1.webp",
+            "Alamana/2.webp",
+            "Alamana/3.webp",
+            "Alamana/4.webp",
+            "Alamana/5.webp",
+            "Alamana/6.webp",
+            "Alamana/7.webp"
         ]
     },
     "GULF FOOD": {

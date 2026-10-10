@@ -837,8 +837,9 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     })();
 
-    // 11. Contact form — WhatsApp is the reliable send path (FormSubmit
-    // needed a one-time inbox confirmation and often never came back).
+    // 11. Contact form — posts to FormSubmit in the background; falls back to the
+    // visitor's mail app if the request fails (e.g. the inbox isn't activated yet).
+    const CONTACT_EMAIL = 'booda2201@gmail.com';
     const contactForm = document.querySelector('#contactForm');
     const contactSubmit = document.querySelector('#contactSubmit');
     const contactStatus = document.querySelector('#contactStatus');
@@ -877,18 +878,37 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
-            const text = [
-                `${window.t('wa.hello')} ${name}`,
-                `${window.t('wa.email')}: ${email}`,
-                '',
-                message
-            ].join('\n');
+            const subject = `New message from portfolio — ${name}`;
+            contactSubmit.disabled = true;
+            setContactStatus(window.t('contact.sending'), 'rgba(255,255,255,0.7)');
 
-            const waUrl = `https://wa.me/201127273643?text=${encodeURIComponent(text)}`;
-            const opened = window.open(waUrl, '_blank', 'noopener');
-            if (!opened) window.location.href = waUrl;
-            setContactStatus(window.t('contact.sent'), '#34d399');
-            contactForm.reset();
+            fetch(`https://formsubmit.co/ajax/${CONTACT_EMAIL}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+                body: JSON.stringify({
+                    name,
+                    email,
+                    message,
+                    _subject: subject,
+                    _replyto: email,
+                    _template: 'table',
+                    _captcha: 'false'
+                })
+            })
+                .then((res) => res.json())
+                .then((data) => {
+                    if (String(data && data.success) !== 'true') throw new Error(data && data.message);
+                    setContactStatus(window.t('contact.sent'), '#34d399');
+                    contactForm.reset();
+                })
+                .catch(() => {
+                    setContactStatus(window.t('contact.failed'), '#fbbf24');
+                    const body = `${message}\n\n— ${name} (${email})`;
+                    window.location.href = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+                })
+                .finally(() => {
+                    contactSubmit.disabled = false;
+                });
         });
     }
 
